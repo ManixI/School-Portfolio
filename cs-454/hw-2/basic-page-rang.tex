@@ -1,0 +1,172 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+\begin{document}
+	\begin{center}
+		\huge{HW-1: Basic Web Crawler}\\[10pt]
+		\large{Ian Manix}
+	\end{center}
+\rule{\textwidth}{0.5pt}
+
+\rule{\textwidth}{0.5pt}
+
+\section{Queries}
+\subsection{tf-idf}
+\begin{center}
+Query -  mac watson 5 \newline
+Results 	\newline
+\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 0.04040541463503894 \\
+\end{tabular}
+
+Query: tremendous 5\newline
+Results 	\newline
+\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'73'& 0.0024243860983782974 \\
+	'573'& 0.0023016189076627076 \\
+	'1655'& 0.002244782962761038 \\
+	'71'& 0.00219068650718732 \\
+	'87'& 0.0020899562022453438 \\
+\end{tabular}
+
+Query -  wine 10\newline
+Results\newline
+\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'4630'& 3.7307310029012134e-05 \\
+	'1370'& 3.4237343146116574e-05 \\
+	'2707'& 3.245692817223643e-05 \\
+	'1835'& 3.204040013993688e-05 \\
+	'2708'& 3.204040013993688e-05 \\
+	'373'& 3.163443254701168e-05 \\
+	'2888'& 3.163443254701168e-05 \\
+	'3703'& 3.0852611221366294e-05 \\
+	'3705'& 3.0852611221366294e-05 \\
+	'4759'& 3.0852611221366294e-05 \\
+\end{tabular}
+
+Query -  tremendous watson 5\newline
+Results\newline
+\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 0.018328226662725315 \\
+\end{tabular}
+
+Query -  tremendous tremendous watson 5\newline
+Results	\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 0.01645374600793116 \\
+\end{tabular}
+\end{center}
+
+An issue here is that the relevance score is slightly different from the expected value based on the sample scores from the handout, for example in the first query the result should return a score of about 0.04123 but instead returns a value of about 0.04051. The error is minor (~2 precent) and the ranking remains the same as in the given example, but I cannot find the source of the difference. The equation I used was the sum total of ln(1+terms/doc length) for each term in the query. Using other log bases resulted in a similar pattern, so it may just be that that I am using a value of e that is either more or less precise then the one used for the examples.
+
+With this formula terms that occur very frequently such as wine have a strong possibility of drowning out less common terms. This can be seen in how the difference in the score between the first and second results in the wine query is 0.31, which is more then 100x the score of the first result for tremendous. This means that the query tremendous wine would result in little to no change in the ranking because the score of wine is so much higher the the score of tremendous
+
+\begin{center}
+
+\subsection{BM25}
+Query -  mac watson 5\newline
+Results \newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 15.463275315511904 \\
+\end{tabular}
+
+Query -  this 10\newline
+Results:\newline\newline No Results
+
+Query -  wine 5\newline
+Results\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'4630'& 0.1307614127188782 \\
+	'1370'& 0.1287537846291922 \\
+	'2707'& 0.12744926762440492 \\
+	'373'& 0.12680687205755087 \\
+	'2888'& 0.12680687205755087 \\
+\end{tabular}
+
+Query -  tremendous watson 5\newline
+Results 	\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 7.731637657755952 \\
+	'73'& 6.481563197851197 \\
+	'573'& 6.354705852978208 \\
+	'1655'& 6.293121275950901 \\
+	'71'& 6.2327188960728686 \\
+\end{tabular}
+
+Query -  tremendous tremendous watson 5\newline
+Results\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'73'& 25.92625279140479 \\
+	'573'& 25.418823411912832 \\
+	'1655'& 25.172485103803606 \\
+	'71'& 24.930875584291474 \\
+	'87'& 24.46130851745879 \\
+\end{tabular}
+\end{center}
+
+The same issue with slightly different scores occurred here as it did for the tf-idf queries. I suspect the cause is the same.
+
+This algorithm resulted in the opposite of tf-idf when it comes to infrequent terms. Terms that are ubiquitous have low values, with one term not returning any result despite being in nearly all documents (no result < 0 is returned). This means that terms unique to one or two documents do not get drown out by common terms making them much more useful as unique identifiers. Also repeated terms had a major impact on the score, putting the same term in twice increased the score for that term so much that the score for the second term lost seemingly all impact on the ranking of the top 5 pages.
+
+\section{Comparing Queries}
+\begin{center}
+tf-idf\newline
+Query -  tremendous watson 5\newline
+Results\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 0.018328226662725315 \\
+\end{tabular}
+
+Query -  tremendous tremendous watson 5\newline
+Results	\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 0.01645374600793116 \\
+\end{tabular}
+
+BM25 \newline
+Query -  tremendous watson 5\newline
+Results 	\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'2'& 7.731637657755952 \\
+	'73'& 6.481563197851197 \\
+	'573'& 6.354705852978208 \\
+	'1655'& 6.293121275950901 \\
+	'71'& 6.2327188960728686 \\
+\end{tabular}
+
+Query -  tremendous tremendous watson 5\newline
+Results\newline\newline
+\begin{tabular}{c|c}
+	Doc ID & Score \\
+	'73'& 25.92625279140479 \\
+	'573'& 25.418823411912832 \\
+	'1655'& 25.172485103803606 \\
+	'71'& 24.930875584291474 \\
+	'87'& 24.46130851745879 \\
+\end{tabular}
+\end{center}
+
+A major difference can be seen in the two algorithms handle repeated terms. BM25 puts a very strong emphasis on repeated terms where as tf-idf scores are impacted only minimally (and in this case even went down). There are pros to each side as on one hand a repeated term can be seen as more important and thus worth weighting higher, but on the other hand a term might repeat only as a result of a user's grammar or syntax, with no extra weight intended. Giving less weight to repeated terms seems the more useful option as if people are searching by keywords they're usually only going to use a word once, where as a user searching via a sentence is more likely to repeat common words such as this, is, the, ect which will only muddy results if emphasized. BM25 dose account for this muddying however by significantly decreasing the relative value of very common terms to a degree that tf-idf dose not.
+
+
+\end{document}

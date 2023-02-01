@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>project 2</title>
+    <script src="matrix_template.js" ></script>
+    <script src="vector_template.js" ></script>
+</head>
+<body>
+    <script>
+        let rot_xz = Mat4.rotation_xz( .25 );
+        const rot_xy = Mat4.rotation_xy( .25 );
+        const rot_yz = Mat4.rotation_yz( .25 );
+        const translate = Mat4.translation( 4, 3, 5 );
+        const scale = Mat4.scale( 2, 3, 4 ); 
+        const mul = scale.mul( translate );
+        const vec = new Vec4(1,2,0.5,1);
+
+        console.log( 'Quarter turn XZ rotation: ', rot_xz.toString() ); 
+        console.log( 'Quarter turn XY rotation: ', rot_xy.toString() ); 
+        console.log( 'Quarter turn YZ rotation: ', rot_yz.toString() ); 
+        console.log( 'Translate by 4, 3, 5: ', translate.toString() );
+        console.log( 'Scale by 2, 3, 4: ', scale.toString() );
+        console.log( 'Translate and then scale: ', mul.toString() );
+        console.log( 'Transform a vector with the preceding matrix: ', mul.transform_vec(vec).toString() );
+        
+        // The above prints:
+        // Quarter turn XZ rotation:  [ [ 0 0 1 0 ] [ 0 1 0 0 ] [ -1 0 0 0 ] [ 0 0 0 1 ] ]
+        // Quarter turn XY rotation:  [ [ 0 1 0 0 ] [ -1 0 0 0 ] [ 0 0 1 0 ] [ 0 0 0 1 ] ]
+        // Quarter turn YZ rotation:  [ [ 1 0 0 0 ] [ 0 0 1 0 ] [ 0 -1 0 0 ] [ 0 0 0 1 ] ]
+        // Translate by 4, 3, 5:  [ [ 1 0 0 4 ] [ 0 1 0 3 ] [ 0 0 1 5 ] [ 0 0 0 1 ] ]
+        // Scale by 2, 3, 4:  [ [ 2 0 0 0 ] [ 0 3 0 0 ] [ 0 0 4 0 ] [ 0 0 0 1 ] ]
+        // Translate and then scale:  [ [ 2 0 0 8 ] [ 0 3 0 9 ] [ 0 0 4 20 ] [ 0 0 0 1 ] ]
+        // Transform a vector with the preceding matrix:  [ 10 15 22 1 ]
+
+         const vec2 = new Vec4(3,6,9,1);
+         const scaled = vec.scaled( 10 );
+         const dot = vec.dot( vec2 );
+         const length = vec2.length();
+         const norm = vec2.norm();
+         const add = vec.add( vec2 );
+                
+         console.log( 'Vector multiplied by scaler: ' , scaled.toString() );
+         console.log( 'Vector dot vector: ', dot.toString() );
+         console.log( 'Vector length: ', length );
+         console.log( 'Vector norm: ', norm.toString() );
+         console.log( 'Vector add: ', add.toString() );
+        // the above prints
+        // Vector multiplied by scaler:  [ 10 20 5 10 ]
+        // Vector dot vector:  20.5
+        // Vector length:  11.269427669584644
+        // Vector norm:  [ 0.26620695282483414 0.5324139056496683 0.7986208584745025 0.08873565094161139 ]
+        // Vector add:  [ 4 8 9.5 2 ]
+    </script>
+</body>
+</html>

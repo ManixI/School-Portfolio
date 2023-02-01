@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body { 
+                display: flex;
+                justify-content: center; 
+                flex-direction: column;
+            }
+            canvas {
+                width: 800;
+                height: 600;
+            }
+            #render-button {
+                width: 180px;
+                height: 50px;
+                font-size: 24pt;
+            }
+            #the-canvas { border: 1px solid darkblue; }
+            #user-matrix input { width: 64px; font-size: 24px; }
+        </style>
+    </head>
+
+    <body>
+        <canvas id = "the-canvas" width = "800" height = "600"></canvas>
+        <script src="mesh.js"></script>
+        <script src = "lib.js"></script>
+        <script src = "matrix.js"></script>
+        <script src="vector.js" ></script>
+        
+        
+
+        <script>
+            let canvas = document.getElementById( 'the-canvas' );
+            
+            /** @type {WebGLRenderingContext} */
+            let gl = canvas.getContext( 'webgl2' );
+
+            let file_name = 'teapot.obj';
+
+            var the_mesh = null;
+            
+            let vertex_source = 
+            `   #version 300 es
+                precision mediump float;
+
+                uniform mat4 modelview;
+
+                in vec3 coordinates;
+                in vec4 color;
+
+                out vec4 v_color;
+
+                void main( void ) {
+                    gl_Position = modelview * vec4( coordinates, 1.0 );
+                    v_color = color;
+                }
+            `;
+            
+            let fragment_source = 
+            `   #version 300 es
+                precision mediump float;
+
+                in vec4 v_color;
+
+                out vec4 f_color;
+
+                void main( void ) {
+                    f_color = v_color;
+                }
+            `;
+
+            let shader_program = 
+                create_compile_and_link_program( gl, vertex_source, fragment_source );
+            gl.useProgram( shader_program );
+
+
+            set_render_params( gl );
+
+            let last_update = performance.now();
+            
+            const ROTATION_SPEED_XY = 0; // quarter turn per second
+            const ROTATION_SPEED_XZ = 0.25 ;
+            const ROTATION_SPEED_YZ = 0;
+            
+            let rotation_amnt_xy = 0.0;
+            let rotation_amnt_xz = 0.0;
+            let rotation_amnt_yz = 0.0;
+
+            function render( now ) {
+                requestAnimationFrame( render );
+
+                // number of seconds elapsed since last frame
+                let time_delta = ( now - last_update ) / 1000;
+                // we divide by 1000 to turn milliseconds into seconds.
+
+
+                last_update = performance.now();
+                gl.clear( gl.COLOR_BUFFER_BIT );
+
+                Mesh.from_obj_file(gl, file_name, shader_program, function(mesh) {the_mesh = mesh})
+
+                rotation_amnt_xy += ROTATION_SPEED_XY * time_delta;
+                rotation_amnt_xz += ROTATION_SPEED_XZ * time_delta;
+                rotation_amnt_yz += ROTATION_SPEED_YZ * time_delta;
+                
+                
+                rotation_amnt_xy %= 1.0; 
+                rotation_amnt_xz %= 1.0; 
+                rotation_amnt_yz %= 1.0; 
+                
+                let rot_xy = Mat4.rotation_xy( rotation_amnt_xy );
+                let rot_xz = Mat4.rotation_xz( rotation_amnt_xz );
+                let rot_yz = Mat4.rotation_yz( rotation_amnt_yz );
+
+                let model = rot_yz.mul( rot_xz ).mul( rot_xy );
+                model = model.mul(Mat4.scale(0.2,0.2,0.2));
+                model = model.mul(Mat4.translation(0,-1.5,0));
+                
+                set_uniform_matrix4( 
+                    gl, shader_program, "modelview", model.data );
+
+                if (the_mesh!=null) {
+                    console.log('mesh exists');
+                    the_mesh.render(gl);
+                } 
+                
+            }
+            
+            requestAnimationFrame( render );
+            
+        </script>
+
+        
+    </body>
+</html>

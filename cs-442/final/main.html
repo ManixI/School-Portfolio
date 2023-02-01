@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body { 
+            }
+            canvas {
+                width: 800;
+                height: 600;
+            }
+            #render-button {
+                width: 180px;
+                height: 50px;
+                font-size: 24pt;
+            }
+            #the-canvas { border: 1px solid darkblue; }
+            #user-matrix input { width: 64px; font-size: 24px; }
+        </style>
+    </head>
+
+    <body>
+        <canvas id = "the-canvas" width = "800" height = "600"></canvas>
+        <script src = "lib.js"></script>
+        <script src = "vector.js"></script>
+        <script src = "matrix.js"></script>
+        <script src = "normal_mesh.js"></script>
+        <script src = "controls.js"></script>
+        <script src = "cam.js"></script>
+        <script src = "lit_material.js"></script>
+        <!-- <script src = "programs.js"></script> -->
+        <script src = "light.js"></script>
+        <script src = "scene.js"></script>
+        <script src = "astroid_belt.js"></script>
+        <script>
+            // server: python3 -m http.server 
+            // http://localhost:8000//main.html
+
+            let canvas = document.getElementById( 'the-canvas' );
+            /** @type {WebGLRenderingContext} */
+            let gl = canvas.getContext( 'webgl2' );
+
+            const GOURAUD_VERTEX_SHADER = 
+            `   #version 300 es
+                precision mediump float;
+
+                uniform mat4 projection;
+                uniform mat4 modelview;
+                uniform mat4 model;
+                uniform mat4 view;
+                uniform vec3 viewer_loc;
+
+                uniform vec3 sun_dir;
+                uniform vec3 sun_color;
+                
+                uniform vec3 light1_loc;
+                uniform vec3 light1_color;
+
+                uniform vec3 light2_loc;
+                uniform vec3 light2_color;
+
+                const float light_attenuation_k = 0.01;
+                const float light_attenuation_l = 0.1;
+                const float light_attenuation_q = 0.00; /* no quadratic term for now */
+
+                uniform float mat_ambient;
+                uniform float mat_diffuse;
+                uniform float mat_specular;
+                uniform float mat_shininess;
+
+                in vec3 coordinates;
+                in vec4 color;
+                in vec2 uv;
+                in vec3 surf_normal;
+
+                out vec4 v_color;
+                out vec2 v_uv;
+
+                vec3 diff_color( 
+                    vec3 normal, 
+                    vec3 light_dir,
+                    vec3 light_color, 
+                    float mat_diffuse 
+                ) {
+                    return mat_diffuse * light_color * max( dot( normal, light_dir ), 0.0 );
+                }
+
+                vec3 spec_color( 
+                    vec3 normal, 
+                    vec3 light_dir,
+                    vec3 eye_dir, 
+                    vec3 light_color, 
+                    float mat_specular,
+                    float mat_shiniess
+                ) {
+                    float cos_light_surf_normal = dot( normal, light_dir );
+
+                    if( cos_light_surf_normal <= 0.0 ) {
+                        return vec3( 0.0, 0.0, 0.0 );
+                    }
+
+                    vec3 light_reflection = 
+                        2.0 * cos_light_surf_normal * normal - light_dir;
+
+                    return 
+                        pow( 
+                            max( dot( light_reflection, normalize( eye_dir ) ), 0.0  ),
+                            mat_shininess 
+                        ) * light_color * mat_specular;
+                }
+
+                float attenuation( vec3 vector_to_light ) {
+                    float light1_dist = length( vector_to_light );
+                    float light1_atten = 1.0 / ( 
+                        light_attenuation_k + 
+                        light_attenuation_l * light1_dist +
+                        light_attenuation_q * light1_dist * light1_dist
+                    );
+
+                    return light1_atten;
+                }
+
+                void main( void ) {
+                    vec3 normal_tx = normalize( mat3( model ) * surf_normal );
+                    vec3 coords_tx = ( model * vec4( coordinates, 1.0 ) ).xyz;
+
+                    gl_Position = projection * modelview * vec4( coordinates, 1.0 );
+                    vec3 eye_dir = normalize( viewer_loc - coords_tx );
+
+                    vec4 ambient_color = vec4( mat_ambient, mat_ambient, mat_ambient, 1.0 );
+
+                    // vec3 sun_dir_tx = 
+                    float cos_sun_dir_surf_normal = dot( sun_dir, normal_tx );
+                    vec3 sun_diffuse_color = diff_color( normal_tx, sun_dir, sun_color, mat_diffuse );
+                    
+                    vec3 sun_spec_color =
+                        spec_color( normal_tx, sun_dir, eye_dir, sun_color, mat_specular, mat_shininess );
+
+                    vec4 color_from_sun = vec4( sun_diffuse_color + sun_spec_color, 1.0 );
+
+                    vec3 vector_to_light1 = light1_loc - coords_tx;
+                    vec3 light1_dir = normalize( vector_to_light1 );
+                    float light1_atten = attenuation( vector_to_light1 );
+
+                    vec3 vector_to_light2 = light2_loc - coords_tx;
+                    vec3 light2_dir = normalize( vector_to_light2 );
+                    float light2_atten = attenuation( vector_to_light2 );
+                
+                    vec3 light1_diffuse_color = diff_color( 
+                        normal_tx, light1_dir, light1_color, mat_diffuse);
+                    vec3 light1_spec_color = spec_color( 
+                        normal_tx, light1_dir, eye_dir, light1_color, mat_specular, mat_shininess );
+                    vec4 color_from_light1 = vec4(
+                            ( light1_diffuse_color + light1_spec_color ) * light1_atten, 1.0 );
+
+                    vec3 light2_diffuse_color = diff_color( 
+                        normal_tx, light2_dir, light2_color, mat_diffuse);
+                    vec3 light2_spec_color = spec_color( 
+                        normal_tx, light2_dir, eye_dir, light2_color, mat_specular, mat_shininess );
+                    vec4 color_from_light2 = vec4(
+                            ( light2_diffuse_color + light2_spec_color ) * light2_atten, 1.0 );
+
+                    /* multiply color by 0 to remove it. try changing the 0 to a small number like .2
+                    and the 1 to the complement of that number (1 - .2 = .8) to see how color blending works.*/
+                    v_color = 
+                        ( 0.0 * color ) + 
+                        ( 1.0 * (
+                            ambient_color +
+                            color_from_sun +
+                            color_from_light1 +
+                            color_from_light2
+                        ) );
+                    v_uv = uv;
+                }
+            `;
+
+            const GOURAUD_FRAGMENT_SHADER = 
+            `   #version 300 es
+                precision mediump float;
+
+                in vec4 v_color;
+                in vec2 v_uv;
+
+                out vec4 f_color;
+
+                uniform sampler2D tex_0;
+
+                void main( void ) {
+                    f_color = v_color * texture( tex_0, v_uv ); 
+
+                    /* we can test depth values with this.
+                    f_color = vec4(vec3(gl_FragCoord.z), 1.0); */
+                }
+            `;
+            // NOTE: debuging vars
+            DRAW_ASTROIDS = true;
+            DRAW_SKYBOX = true;
+            DRAW_SUN = true;
+
+            let lit_program = 
+                create_compile_and_link_program( 
+                    gl, 
+                    /*PHONG_VERTEX_SHADER,*/ GOURAUD_VERTEX_SHADER,
+                    /*PHONG_FRAGMENT_SHADER,*/ GOURAUD_FRAGMENT_SHADER
+                );
+
+            gl.useProgram( lit_program );
+
+            // setup render loop
+            set_render_params( gl );
+
+            let last_update = performance.now();
+
+            // lets make a solar system to start
+            //let solar_system = new Scene();
+            
+            // setup controlls
+            const DESIRED_TICK_RATE = 60;
+            const DESIRED_MSPT = 1000.0 / DESIRED_TICK_RATE;
+
+            const ROTATION_SPEED = 0.2; // eighth turn per second
+            const ROTATION_SPEED_PER_FRAME = ROTATION_SPEED / DESIRED_TICK_RATE;
+
+            const FLY_SPEED = 200;    // units per second
+            const FLY_SPEED_PER_FRAME = FLY_SPEED / DESIRED_TICK_RATE;
+
+            let keys = Keys.start_listening();
+
+
+            // load textures
+            /*
+            let metal = 
+                new LitMaterial( gl, 'tex/metal.png', gl.LINEAR, 0.25, 1, 2, 5 );
+            let grass = 
+                new LitMaterial( gl, 
+                'tex/grass_lawn_seamless.png', gl.LINEAR, 0.2, 0.8, 0.05, 1.0 ); */
+            let tex_list = []
+            let scale = 
+                new LitMaterial( gl, 'tex/metal_scale.png', gl.LINEAR, 0, 3, 8, 8 );
+            tex_list.push(scale);
+            let sun_tex =
+                new LitMaterial( gl, 'tex/2k_sun.jpg', gl.LINEAR, 1, 1, 2, 4 );
+            tex_list.push(sun_tex);
+            let rock_tex = 
+                new LitMaterial( gl, 'tex/2k_moon.jpg', gl.LINEAR, 0, 3, 2, 8);
+            tex_list.push(rock_tex);
+            let venus_tex =
+                new LitMaterial( gl, 'tex/2k_venus_surface.jpg', gl.LINEAR, 0, 3, 1, 4);
+            tex_list.push(venus_tex);
+            let merc_tex =
+                new LitMaterial(gl, 'tex/2k_mercury.jpg', gl.LINEAR, 0,3,1,2);
+            tex_list.push(merc_tex);
+            let earth_tex = 
+                new LitMaterial(gl, 'tex/2k_earth_daymap.jpg', gl.LINEAR, 0,3,1,2);
+            let mars_tex =
+                new LitMaterial(gl, 'tex/2k_mars.jpg', gl.LINEAR, 0,3,1,2);
+            tex_list.push(mars_tex);
+            let sky_tex = 
+                new LitMaterial(gl, 'tex/2k_stars_milky_way.jpg', gl.LINEAR, 1,1,2,4)
+            let water_tex =
+                new LitMaterial(gl, 'tex/water.jpg', gl.LINEAR, 1,3,3,3);
+            tex_list.push(water_tex);
+            /*
+            let sun_dir = ( new Vec4( 1.0, 0.0, 0.0, 0.0 ) ).norm();
+            let sun = new Light( sun_dir.x, sun_dir.y, sun_dir.z, 1.0, 0.95, 0.85, 0 ); */
+            // TODO: put light in sun mesh, works
+            let light1 = new Light( -20, -20, 0, 1.0, 0.2, 0.9, 1 ); // yellow 
+            //let light1 = solar_system.create_node(1,0,5, 0,0,0, 1,1,1);
+            //light1.data = new NodeLight(1.0, 0.2, 0.2, false);
+            let light2 = new Light(20,20,0, 0,1,0, 2);
+
+
+            /*
+            let mesh =
+                NormalMesh.uv_sphere( gl, lit_program, 1, 16, scale ); 
+                // NormalMesh.box( gl, lit_program, 1, 1, 1, metal ); */
+
+            // setup projection matrix
+            let projection = Mat4.perspective_fovx( 0.125, 4 / 3, 0.125, 1024 );
+            let current_program = lit_program;
+
+
+            
+
+//-----------------------------------------------------------------------------------------------------
+            let root = new Scene();
+
+            // initalize camera
+            let cam = root.create_node(
+                0,0,0, 0,0,0, 1,1,1);
+            root.set_camera_node(cam);
+            cam.translate( 0, 0, -50);
+            root.set_camera_node(cam);
+
+            let skybox = root.create_node(
+                0,0,0, 0,0,0, 1,1,1);
+            skybox.data = NormalMesh.box(gl, current_program, 1023,1023,1023, sky_tex);
+
+            // initalize sun
+            root.set_sun_color(1.0, 0.95, 0.85, 0);
+            root.set_sun_direction(1.0,0.0,0.0);
+
+            // initalize background
+            let background = root.create_node(0,0,65, 0,0,0, 4,4,4);
+            background.data = NormalMesh.from_heightmap(gl, current_program,
+                NormalMesh.fractal_map_test(1,4),
+                0, 1, scale);
+            background.add_pitch(0.24)
+            // fill in water
+            let background_water = background.create_child_node(0,0,0, 0,0,0, 1,1,1);
+            background_water.data = NormalMesh.platform(gl, current_program,
+                16, 16, 0, 1, water_tex);
+
+            // initalize earth
+            let earth = cam.create_child_node(0,0,50, 0,0,0, 1.2,1.2,1.2);
+            earth.data = NormalMesh.uv_sphere(gl, current_program, 1, 16, earth_tex);
+            // setup spare lives
+            let NUM_LIVES = 3;
+            let lives = []
+            for (let i=0; i<NUM_LIVES-1; i++) {
+                // TODO: test exact positon
+                life = cam.create_child_node(-10+i*1.5, 8, 30, 0,0,0, 1/2, 1/2, 1/2);
+                life.data = NormalMesh.uv_sphere(gl, current_program, 1, 4, earth_tex);
+                lives.push(life);
+            }
+
+            // setup adversaries
+            let NUM_STROIDS = 1;
+            const ACCELERATION = 9.8;
+            // list of spawned enemies
+            let stroid_list = [];
+            // track cumulative momentum in list of Vec2s
+            let stroid_momentum = [];
+            let moon_anchors = [];
+
+            // function to retun random texture from list
+            function rand_tex(tex_list) {
+                let rand = Math.floor(rand_range(0, tex_list.length));
+                if (rand = tex_list.length) {
+                    rand = 0;
+                }
+                return tex_list[rand];
+            }
+            let astroids = root.create_node(0,0,0, 0,0,0, 1,1,1);
+            // function to create adversaries
+            function create_stroid(root, num, list, pos_list, tex_list, moon_anchors, current_program) {
+                let pos = point_in_ring(10,15);
+                tmp = root.create_child_node(pos[0],pos[1],50, 0,0,0, 2,2,2);
+                tmp.data = NormalMesh.uv_sphere(gl, current_program, 1,8, mars_tex);
+                pos_list.push(new Vec2(0,0));
+                // create moons
+                moon_anchor = tmp.create_child_node(0,0,0, 0,0,0, 1/2,1/2,1/2);
+                moon_anchors.push(moon_anchor);
+                for (let i = 0; i<list.length+1; i++) {
+                    loc = point_in_ring((i+1)*2,(i+1)*2);
+                    moon = moon_anchor.create_child_node(3,3,0, 0,0,0, 1,1,1);
+                    moon.data = NormalMesh.uv_sphere(gl, current_program, 1, 3, rock_tex);
+                }
+                list.push(tmp);
+                return moon_anchors[0];
+            }
+
+            tmp_anch = create_stroid(astroids, NUM_STROIDS, stroid_list, stroid_momentum, tex_list, moon_anchors, current_program);
+            //console.log(stroid_list.length)
+            //console.log("a")
+            // attraction between two objects
+            const ENEMY_MASS = 1;
+            const EARTH_MASS = 2;
+            const GRAVITY = 1;
+            // TODO: rng enemy size and mass
+            function gravity(m1, m2, r, g) {
+                return g*m1*m2/(r**r);
+            }
+
+
+
+            let start = performance.now();
+            let prev_time = 0;
+            
+
+            // TODO: find better place to put these
+            /*
+            const X_BORDER = 100;
+            const Y_BORDER = 100;
+            const Z_MAX = -20;
+            const Z_MIN = -75; */
+
+            let hit_flag = false;
+            let invul_count = 0;
+            let spawn_timer = 0;
+
+            let earth_holder = earth.data;
+
+
+            function render( now ) {
+                last_update = now;
+
+                requestAnimationFrame( render );
+                
+                gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+                // transform viewer coordinates
+                // let viewer_loc = cam.get_transformed_coordinates();
+                set_uniform_vec3( gl, current_program, 'viewer_loc', cam.x, cam.y, cam.z );
+
+                // bind lights
+                //sun.bind( gl, current_program, modelview );
+                //light1.bind( gl, current_program, modelview );
+                root.bind_sun(gl, current_program)
+
+                let mesh_list = [];
+                let light_list = []
+                root.generate_render_batch(mesh_list, light_list);
+
+                // TODO: this is a stop gap as currenlty shader only accepts single dynamic light
+                //light_list[0].bind(gl, current_program);
+
+                //back_end_render(gl, mesh_list);
+                let view = root.get_camera_view();
+
+                set_uniform_matrix4( gl, current_program, 'projection', projection.data );
+                set_uniform_matrix4( gl, current_program, 'view', view.data );
+
+                for (let i=0; i<mesh_list.length;i++) {
+
+                    let mat = mesh_list[i].matrix;
+                    let mesh = mesh_list[i].mesh;
+
+                    let model = mat;
+                    let modelview = view.mul(model);
+
+                    set_uniform_matrix4( gl, current_program, 'modelview', modelview.data );
+                    set_uniform_matrix4( gl, current_program, 'model', model.data );
+
+                    light1.bind( gl, current_program, modelview );
+                    light2.bind(gl, current_program, modelview);
+
+
+                    mesh.render(gl);
+                } 
+
+            }
+
+            // controlls
+            const KEYMAP = {
+                //'Space': function() { cam.move_in_direction( 0, 0, FLY_SPEED_PER_FRAME ); },
+                //'KeyC': function() { cam.move_in_direction( 0, 0, -FLY_SPEED_PER_FRAME ); },
+                'KeyA': function() { cam.move_in_direction( -FLY_SPEED_PER_FRAME, 0, 0 ); },
+                'KeyD': function() { cam.move_in_direction( FLY_SPEED_PER_FRAME, 0, 0 ); },
+                'KeyW': function() { cam.translate( 0, FLY_SPEED_PER_FRAME, 0 ); },
+                'KeyS': function() { cam.translate( 0, -FLY_SPEED_PER_FRAME, 0 ); },
+                /*'KeyQ': function() { cam.add_roll( -ROTATION_SPEED_PER_FRAME ); },
+                'KeyE': function() { cam.add_roll( ROTATION_SPEED_PER_FRAME ); },*/
+                'ArrowLeft': function() { cam.add_yaw( -ROTATION_SPEED_PER_FRAME ); },
+                'ArrowRight': function() { cam.add_yaw( ROTATION_SPEED_PER_FRAME ); },
+                /*'ArrowUp': function() { cam.add_pitch( -ROTATION_SPEED_PER_FRAME ); },
+                'ArrowDown': function() { cam.add_pitch( ROTATION_SPEED_PER_FRAME ); },*/
+            };
+
+            SPAWN_DELAY = 0;
+            function update() {
+                let keys_down = keys.keys_down_list();
+
+                for( const key of keys_down ) {
+                   let bound_function = KEYMAP[ key ];
+
+                   if( bound_function ) {
+                       bound_function();
+                   }
+                }
+                //--------------------------------------------------------------------------
+                // Passive Movement
+                //--------------------------------------------------------------------------
+                // skybox follow cam
+                if (DRAW_SKYBOX) {
+                    skybox.x = cam.x;
+                    skybox.y = cam.y;
+                    skybox.z = cam.z;
+                }
+
+                // spin moons
+                for (let i=0; i>moon_anchors.length; i++) {
+                    moon_anchors[i].add_roll(ROTATION_SPEED_PER_FRAME*6);
+                }
+
+                // spin lives
+                for (let i=0; i<NUM_LIVES-1; i++) {
+                    lives[i].add_roll(ROTATION_SPEED_PER_FRAME*3);
+                }
+
+                // spin earth
+                earth.add_roll(ROTATION_SPEED_PER_FRAME*3);
+
+                tmp_anch.add_roll(ROTATION_SPEED_PER_FRAME*32);
+                // spin baybe spin!
+
+                // hardcoded lights
+                // TODO: light as child node
+                light1.x=cam.x;
+                light1.y=cam.y;
+                light1.z=cam.z+50;
+
+
+                //----------------------------------------------------------------------------
+                // Active Movement
+                //----------------------------------------------------------------------------
+
+                // adversaries chase player
+                // chasing is done only in xy plane
+                camera_pos = new Vec2(cam.x, cam.y);
+                //console.log(camera_pos)
+                for (let i=0; i<stroid_list.length; i++) {
+                    /*
+                    let pos = new Vec2(stroid_list[i].x, stroid_list[i].y);
+                    pos = pos.sub(camera_pos);
+                    tmp = pos;
+                    pos = pos.scaled(-1)        // TODO: how do I skip this step?
+                    pos = pos.norm()            // normalize to make acceleration math easier
+
+                    // scale attraction speed based on gravity
+                    acceleration = gravity(ENEMY_MASS, EARTH_MASS, tmp.length(), GRAVITY);
+                    pos.scaled(acceleration);
+                    stroid_list[i].translate_vec(pos);
+                    */
+
+                    // with momentum
+                    // from https://stackoverflow.com/questions/12380536/how-can-i-scale-movement-physics-functions-to-frames-per-second-in-a-game-engin
+                    let pos = new Vec2(stroid_list[i].x, stroid_list[i].y);
+                    //console.log(pos)
+                    //let dif = camera_pos.sub(pos);
+                    let dif = camera_pos.sub(pos);
+                    let dx = camera_pos.x - stroid_list[i].x;
+                    let dy = camera_pos.y - stroid_list[i].y;
+                    //dif.y = -dif.y;
+                    //dif = dif.scaled(-1)
+                   //console.log(dif)
+                    let angle = Math.atan(dy, dx);
+                    if (dx < 0) {angle += Math.PI;}
+                    else if (dy < 0) {angle += 2*Math.PI;}
+                    //console.log(angle)
+
+                    //let force = gravity(ENEMY_MASS, EARTH_MASS, dif.length(), GRAVITY);
+                    let force = 0.35;
+                    // could make vec2 for this, but this is faster then maing new object?
+                    stroid_momentum[i].x += force * Math.cos(angle);
+                    //console.log(force * Math.cos(angle))
+                    stroid_momentum[i].y += force * Math.sin(angle);
+
+                    // move stroid
+                    let moment = new Vec4(stroid_momentum[i].x, stroid_momentum[i].y, 0, 0)
+                    //console.log(moment.x, moment.y, moment.z);
+                    //moment.z = 0;
+                    //moment = moment.scalee(-1);
+                    //stroid_list[i].translate_vec(moment);
+                    stroid_list[i].x += stroid_momentum[i].x;
+                    stroid_list[i].y = stroid_momentum[i].y;
+                    //onsole.log(stroid_list[i].x,stroid_list[i].y,stroid_list[i].z,)
+                    //console.log(stroid_momentum[i].vec4());
+                }
+
+                //--------------------------------------------------------------------------
+                // Game State Logic
+                //--------------------------------------------------------------------------
+
+                // spawn new enemy every 60s
+                // every time timer rolls over
+                //cur_time = (performance.now() / 1000) % 60;
+                spawn_timer++;
+                SPAWN_DELAY++;
+                if (spawn_timer > 60*(60/1000)*60) {
+                    spawn_timer = 0;
+                    stroid = root.create_node(0,0,0, 0,0,0, 1,1,1);
+                    stroid_list.push(stroid);
+                    stroid_momentum.push(new Vec2(0,0));
+                    stroid.data = NormalMesh.uv_sphere(gl, current_program, 1,8, sun_tex);
+                    // every enemy has one more moon then previous enemies
+                    moon_anchor = stroid.create_child_node(0,0,0, 0,0,0, 1/2,1/2,1/2);
+                    moon_anchors.push(moon_anchor);
+                    /*for (let i=0; i<stroid_list.length; i++) {
+                        let pos = point_in_ring(i+2,i+2);
+                        moon = moon_anchor.create_child_node(pos[0],pos[1],0, 0,0,0, 1,1,1);
+                        moon.data = NormalMesh.uv_sphere(gl, current_program, 1, 3, rock_tex);
+                    }*/
+
+                    // translate inital enemy position to ring around player
+                    pos = point_in_ring(10, 15);
+                    pos = camera_pos.add(new Vec2(pos[0],pos[1]));
+                    stroid.translate_vec(pos.vec4());
+                    stroid.translate(0,0,50,0);
+                }
+
+                // check if enemy in range of player
+                // moons also count
+                if (SPAWN_DELAY < 120 && hit_flag == false) {
+                    let dist_list = [];
+                    for (let i=0; i<stroid_list.length; i++) {
+                        dist_list = stroid_list[i].get_dist_from_point(camera_pos.vec4());
+                        for (let i=0; i<dist_list.length; i++) {
+                            //console.log(dist_list[0])
+                            if (dist_list[0] < 50.5) {
+                                console.log("Hit!");
+                                // colision
+                                hit_flag = true;
+                                NUM_LIVES -=1;
+                                if (NUM_LIVES < 1) {
+                                    // TODO: End Game
+                                }
+                                //stroid_momentum[0] = stroid_momentum.scaled(-1);
+                                invul_count = 10;
+                                lives[NUM_LIVES-1].data = null;
+                                //TODO: flash screen red
+                            }
+                        }
+                    }
+                }
+                
+                // invul
+                if (invul_count > 0) {
+                    invul_count--;
+                    let t = invul_count % 10;
+                    // flash every 5 frames if invulnurable
+                    if (t < 5) {
+                        if (earth.data = null)
+                            earth.data = earth_holder;
+                            //earth_holder = null;
+                    } else {
+                        if (earth.data != null) {
+                            earth_holder = earth.data;
+                            earth.data = null;
+                        }
+                    }
+                } else {
+                    hit_flag = false;
+                    if (earth.data == null) {
+                        earth.data = earth_holder;
+                        // = null;
+                    }
+                }
+                if (invul_count == 0 && earth.data == null) {
+                    earth.data = earth_holder;
+                } 
+                console.log(invul_count);
+
+                //prev_time = cur_time;
+
+
+                // bound player movement
+                // TODO: screne wrap
+                /*
+                if(cam.x > X_BORDER) {cam.x=X_BORDER;}
+                if(cam.x < -X_BORDER) {cam.x= -X_BORDER;}
+                if(cam.y > Y_BORDER) {cam.y=Y_BORDER;}
+                if(cam.y > -Y_BORDER) {cam.y= -Y_BORDER;}
+                if(cam.z > Z_MAX) {cam.z=Z_MAX;}
+                if(cam.z < Z_MIN) {cam.z=Z_MIN;} */
+                
+                
+                // sun chases camera
+                // example code, known working, leaving it for now
+                /*
+                const SUN_SPEED = 0.5;
+                camera_pos = new Vec4(cam.x, cam.y, cam.z, 1);
+                sun_pos = new Vec4(sun.x, sun.y, sun.z, 1);
+                sun_pos = sun_pos.sub(camera_pos);
+                sun_pos = sun_pos.scaled(-1);
+                sun_pos = sun_pos.norm()
+                sun_pos = sun_pos.scaled(SUN_SPEED);
+                sun.translate_vec(sun_pos);
+                */
+
+                
+                return;
+                
+
+            }
+            
+            requestAnimationFrame( render );
+            setInterval( update, DESIRED_MSPT );
+        </script>
+    </body>
+</html>

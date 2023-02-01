@@ -1,0 +1,89 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+\begin{document}
+	\begin{center}
+		\huge{HW-1: Basic Web Crawler}\\[10pt]
+		\large{Ian Manix}
+	\end{center}
+\rule{\textwidth}{0.5pt}
+
+\rule{\textwidth}{0.5pt}
+
+\section{Crawler}
+\subsection{Introduction}
+
+This is a very basic web crawler that  will start with a given seed url and search record a text dump and adjacency matrix for a specified number of pages. This bot crawls in a bredth first manner and will leave the site it initially started on
+
+\subsection{Usage Warning}
+1. This bot dose not currently save it's que of searched sited between runs. This means that after a certain point it will fail to search from a given seed as it will skip any links already in the adjacency matrix. If every url in seed page is in said matrix, it will skip all links and return with an error message
+2. While this bot will respect the delay in the robots.txt of the initial file, it will not for any sites it visits outside of the seed's domain. Use at your own peril
+
+\subsection{Seeds}
+These are the seeds that were tested:
+https://wsu.edu/
+https://www.wikipedia.org/
+These were tested because they have no crawl or request limit for * user agents. Any seed will work as long as the robots.txt file can be found at <seed>robots.txt
+
+\subsection{Process}
+This crawler starts by getting a seed and page count from the user, if left blank it will default to a seed of https://www.wikipedia.org/ and a page count of 5000. It will then check to see if the files sub directory exists in the program's current directory. If it dose not it will make a new directory named files. It will then check to see if the file visited-sites.json exists and is empty. If it is empty the file will be filled with an initial example entry. Next the program will read the robots.txt file and get the crawl and request rate as well as a list of forbidden domains. 
+
+After this comes the main loop where the program will start by sleeping for either the crawl or request rate seconds (whichever is higher). Next it will write the contents of the page it is looking at to a file named {pagename}.txt in the files directory. After this it will loop though all links on the current page. If any of these links is a page that has been visited, is forbidden by robots.txt, or is already in the que, it will be skipped. Otherwise it will be added to the que of pages to crawl. Next an entry into the adjacency matrix visited-domains.json will be made for the current page recording a list of all adjacent pages. Finally the next page to crawl is pulled from the que. This will repete until either the specified number of pages have been crawled or the que is empty.
+
+\subsection{json file}
+Below is an example of the starting json file visited-domains.txt. The first entry serves both as a place holder to mitigate certain errors as well as an example of how data will be inserted into the adjacency matrix.
+${
+"sites_visited": [
+{
+	"url": "example",
+	"ajacent": [
+	"sites",
+	"go",
+	"here"
+	]
+}
+]
+}$
+
+\rule{\textwidth}{0.5pt}
+\section{Development}
+\subsection{Development Difficulties}
+The single largest difficult I had with this project was time, as for several reasons I ended up having less time then expected to work on it, as can be seen both by the late hand in date and the several known issues. The two remaining issues are visiting sites external to the seed domain and handling cases where a given seed will result in a dead end if the entire seed page has been crawled even if the seed's entire valid domain has not. I know how I want to fix these and will discuss that later. 
+
+In what was developed there were 3 main challenges: Crawling, the json file, and LaTeX. LaTeX was challenging because I had never heard of it before this assignment and thus ended up scrambling to figure it out. There is likely a lot I am missing regarding it that could improve this report but I am still in the phase of not even knowing what is possible and thus not even knowing what to lookup. The json file was a challenge in that I struggled for a long time in figuring out exactly how to read and format things properly. I figured out json.dump and json.load fairly easily but there always seemed to be some formatting error, and I'm still not clear on the differences between dump and dumps, and load and loads. Crawling turned out to be the easiest of the challenges as far as I impediment it, but there are still things that could be improved in terms of efficiency and at least one pitfall that needs to be covered before the program gets my ip banned from some sites.
+
+\subsection{Development Success}
+The main success was the actual crawling. I expected this to be the most difficult part of this project but it ended up being the easiest part. This may be as a result of what I left unimplemented, but most of that is an issue of the procedure of what to crawl and not the act of getting information from a web page itself.
+
+\subsection{Future Development}
+1. Handling external links:
+This needs to be done as the bot currently dose not look at the robots.txt of external sites and thus can result in the expected request and crawl rate on said sites can be easily exceed. The simple solution here is to simply not add any external sites to the que, but my preferred option would be to set external links aside and then revisit them once the initial seed domain has become exhausted. This would require solving issue 2
+
+2. Finding robots.txt
+This is an issue because the current process simply assumes the robots.text file can be found at <seed>robots.txt. Instead there needs to be a method to find this from any given absolute link both to allow for the user to specify more specific domains as well as to allow for safe crawling of sites external to the initial seed. This should also track if the robots file has already been found and recorded for a given domain so that time isn't wasted re-finding it every time the crawler moves to a different domain. This probably involves a second json file tracking domains and their associated robots.txt files.
+
+3. Not re-treading old ground
+Currently there is an issue where the crawler can get stuck because a seed has been previously crawled but not all of the sub-pages have been. This can be solved by looking through the json file at startup and reading any ajacent pages into the que that do not already have their own entry in the matrix. This could become resource intensive if a lot of pages have already been called, so limiting it to the desired number of page crawls seems like the easy solution here.
+ 
+4. Updating pages
+Currently this is only done if you remove a pages entry from the matrix manually. Ideally there would be a timestamp associated with every page and the user would be able to specify how old pages should be before they're updated, and if such an update needs to happen at all.
+
+5. Methods
+There are several things in the current program that should be broken out into their own method to make calling them easier. Adding info to the matrix, writing a page to a file, and checking if a page has already been visited are the big ones currently.
+
+6. Connection Errors
+Currently the bot has no way of handling connection issues
+
+7. Hash URLs
+These are currently not handled and are simply skipped. There is likely a better way of dealing with these then just ignoring them.
+
+\rule{\textwidth}{0.5pt}
+\section{Example Pages}
+I can't get the example text to display so please just refer to provided txt files
+
+
+\end{document}

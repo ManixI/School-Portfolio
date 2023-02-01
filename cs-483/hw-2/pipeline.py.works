@@ -1,0 +1,89 @@
+#! usr/python3
+
+import pandas as pd
+import numpy as np
+from functools import lru_cache
+import math
+from itertools import combinations
+from sklearn.pipeline import Pipeline
+from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import r2_score
+
+class SelectColumns(BaseEstimator, TransformerMixin):
+    # pass the function we want to apply to the column 'SalePrice’
+    def __init__( self, columns ):
+        self.columns = columns
+    # don't need to do anything
+    def fit( self, xs, ys, **params ):
+        return self
+    #actually perform the selection
+    def transform( self, xs ):
+        return xs[ self.columns ]
+
+data = pd.read_csv('AmesHousing.csv')
+#print(pd.get_dummies(data).columns)
+data = data.drop(columns=['Order', 'PID'])
+data = pd.get_dummies(data, drop_first=True)
+data = pd.get_dummies(data, columns=['MS SubClass'], drop_first=True)
+xs = data.drop( columns = [ 'SalePrice' ] )
+ys = data[ 'SalePrice' ]
+train_x, test_x, train_y, test_y = train_test_split( xs, ys, train_size = 0.7 )
+
+# get regressor to transform target data
+from sklearn.linear_model import LinearRegression
+from sklearn.compose import TransformedTargetRegressor
+
+regressor = TransformedTargetRegressor( 
+    LinearRegression( n_jobs = -1 ),
+    func = np.sqrt,
+    inverse_func = np.square 
+    ) 
+
+steps = [
+    ( 'column_select', SelectColumns( ['Gr Liv Area', 'Overall Qual'] ) ),
+    ( 'linear_regression', regressor ),
+]
+pipe = Pipeline( steps )
+pipe.fit(train_x, train_y ) 
+
+
+'''
+# make list of all possible column combos
+cols = xs.columns
+output = list()
+# combos works, but time complexity is too long. Need to A get dummys after list is generated,
+# B limit combomations to a smaller list, and C get put in lru_catche somehow
+# 4 seems to be limit, need to try RNG approach instest
+for i in range(4):
+    output += combinations(cols,i)
+print(output)
+'''
+output = ['Overall Qual', 'Year Built', 'Gr Liv Area', 'Bedroom AbvGr', 'Overall Cond'], ['Overall Qual', 'Year Built']
+
+
+grid = { 
+    'column_select__columns': output, 
+        'linear_regression': [LinearRegression( n_jobs = -1 ), # no transformation
+        TransformedTargetRegressor(
+            LinearRegression( n_jobs = -1 ), 
+            func = np.sqrt, inverse_func = np.square ), 
+        TransformedTargetRegressor(
+            LinearRegression( n_jobs = -1 ), 
+            func = np.cbrt, 
+            inverse_func = lambda y: np.power( y, 3 ) ), 
+        TransformedTargetRegressor(
+            LinearRegression( n_jobs = -1 ),
+            func = np.log,
+            inverse_func = np.exp),] 
+}
+
+search = GridSearchCV( pipe, grid, scoring = 'r2', n_jobs = -1 )
+search.fit( train_x, train_y )
+print(search.best_estimator_)
+guess = search.predict(test_x)
+print()
+print(r2_score(list(guess), list(test_y)))
+
+

@@ -1,0 +1,174 @@
+#!/usr/python3
+
+import pandas as pd
+import numpy as np
+from functools import lru_cache
+import math
+
+class naive_bayes:
+    @lru_cache(maxsize = 128)
+    def __init__ (self, data_file):
+        self.data = pd.read_csv(data_file)
+        #self.convert_cat_to_bool(self.data, 'legs')
+        data = self.data['legs']
+        mean = data.sum() / len(data)
+        self.data['legs'] = np.where(self.data['legs'] > mean, 1, 0)
+        self.train = self.data.sample(frac = 0.7)
+        self.test = self.data.drop(self.train.index)
+        self.cols = self.train.columns.astype(str)
+        values = self.test[self.cols[-1]].unique()
+        # LaPlace smoothing value
+        self.a = 0.00000001
+
+        prediction = []
+        prob_arr = []
+        mathces = []
+
+        #self.convert_cat_to_bool()
+
+        #todo: replace lages with bool > then mean
+
+        '''
+        # loop though data, getting accuracy for any 3 col combo
+        self.train.sort_index(inplace=True)
+        for i in range(1, len(self.cols)-3):
+            for j in range(2, len(self.cols)-2):
+                for k in range(3, len(self.cols)-1):
+                    if i==k or i==k or j==k:
+                        continue
+                    pred_tmp = []
+                    pred_precent = []
+                    pred_featurs = []
+                    for index, row in self.train.iterrows():
+                        feats = [self.cols[i], self.cols[j], self.cols[k]]
+                        tf = row[feats]
+                        tmp = self.bays(tuple(feats), tuple(tf))
+                        pred_tmp.append(tmp.idxmax())
+                        pred_precent.append(tmp.max())
+                        pred_featurs.append(feats)
+                        print(str(tmp.idxmax())+" "+str(tmp.max())+" "+str(feats))
+                    #print(pred_featurs)
+                    #print(pred_tmp)
+                    print(str(i)+" "+str(j)+" "+str(k))  
+                    ''' 
+        
+            
+
+    # takes a feture name string feature and class value
+    # returns pandas series of probs with index values
+    # todo: return for every class value instead of value and !value
+    @lru_cache(maxsize = 128)
+    def con_prob(self, feature):
+        last = self.cols[-1]
+        rows = self.train[[feature, last]]
+        values = self.data[last].unique()
+        values.sort()
+        prob_arr = []
+        fil_val = self.a / (self.a * (len(self.cols)-2))
+        for i in range(len(values)):
+            tmp_rows = rows.loc[rows[last] == values[i]]
+            tmp_count = tmp_rows[feature].value_counts()
+            # if a class value has no data, treat prob false as 1
+            try:
+                prob_false = (tmp_count.loc[0] + self.a) / (tmp_count.sum() + self.a * (len(self.cols)-2))
+            except:
+                prob_false = 1-fil_val
+            prob_true = 1 - prob_false
+            prob_arr.append(prob_true)
+        prob = pd.Series(prob_arr, index=values)
+        prob.sort_index(inplace=True)
+        return prob
+
+    # takes a frature
+    # returns a pandas series of probibility of feature with index class
+    @lru_cache(maxsize = 128)
+    def class_prob(self, feat):
+        clas = self.train[feat]
+        values = clas.unique()
+        values.sort()
+        count = clas.value_counts()
+        prob_arr = []
+        for i in range(len(count)):
+            tmp = count.iloc[i] / count.sum()
+            prob_arr.append(tmp)
+        prob = pd.Series(prob_arr, index = values)
+        prob.sort_index(inplace=True)
+        return prob
+
+    # given P(b|a) returns P(a|b)
+    #   P(a|b) = P(b|a)P(a)
+    #               P(b)
+    # only returns one value 
+    # TODO: Fix to calculate for given row
+    @lru_cache(maxsize = 128)
+    def bays(self, feat, tf):
+        values = self.data[self.cols[-1]].unique()
+        values.sort()
+        Pa = self.class_prob(self.cols[-1])
+        prob_true_arr = []
+        prob_false_arr = []
+        vals_arr = []
+        # this gives value for on variable
+        for i in range(len(values)):
+            num = 1
+            den_true = 0
+            den_false = 0
+            den_false = 0
+            for j in range(len(feat)):
+                num = num + math.log(self.con_prob(feat[j]).iloc[i],2)
+                if tf[j] == 1:
+                    den_true = den_true + math.log(self.class_prob(feat[j]).loc[1],2)
+                    den_false = den_false + math.log(self.class_prob(feat[j]).loc[0],2)
+                else:
+                    den_false = den_true + math.log(self.class_prob(feat[j]).loc[1],2)
+                    den_true = den_false + math.log(self.class_prob(feat[j]).loc[0],2)
+            num = pow(2, num)
+            den_true = pow(2, den_true)
+            den_false = pow(2, den_false)
+            tmp_true = (num * Pa.iloc[i])  / den_true
+            tmp_false = (num * (1-Pa.iloc[i])) / den_false
+            vals_arr.append(i+1)
+            prob_true_arr.append(tmp_true)
+            prob_false_arr.append(tmp_false)
+
+        prob_true = pd.Series(prob_true_arr, index=vals_arr)  
+        prob_true.sort_index(inplace=True)
+        self.t = prob_true
+        prob_false = pd.Series(prob_false_arr, index=vals_arr)  
+        prob_false.sort_index(inplace=True)
+        self.f = prob_false
+        prob = self.normalise()
+        return prob
+
+    # given a data set, find 3 colums that best predict result with naive bayes
+    @lru_cache(maxsize = 128)
+    def find_best(self):
+        return
+
+    # takes an outfile and returns how accurate the test it reptersents was
+    def accuracy(self, outFile):
+        return
+
+    # tale a series of true and false bayes and return a series of
+    # normalised true values
+    # uses self.t and self.f because can't pass series
+    @lru_cache(maxsize = 128)
+    def normalise(self):
+        prob = []
+        values = self.train[self.cols[-1]].unique()
+        values.sort()
+        for i in range(len(values)):
+            tmp = self.t.iloc[i] / (self.t.iloc[i] + self.f.iloc[i])
+            prob.append(tmp)
+        prob_ser = pd.Series(prob, index=values)
+        prob_ser.sort_index(inplace=True)
+        return prob_ser
+
+    def convert_cat_to_bool(self, frame, feat):
+        data = frame[feat]
+        mean = data.sum() / len(data)
+        for i in range(len(data)):
+            if mean > data.loc[[i],[feat]]:
+                data.loc[[i],[feat]] = 0
+            else:
+                data.loc[[i], [feat]] = 1

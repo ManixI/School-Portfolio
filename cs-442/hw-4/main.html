@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Hello Triangle</title></head>
+    <style>
+        #the-canvas { border: 3px solid darkblue; }
+    </style>
+    <body>
+        <p>Mesh</p>
+        <canvas id = "the-canvas" width = "800" height = "600"></canvas>
+    </body>
+
+    <script src="matrix_template.js" ></script>
+    <script src="vector_template.js" ></script>
+    <script src="mesh.js"></script>
+    <script src="lib.js"></script>
+
+    <script>
+    console.log('Test, please ignore');
+    // set area in page this will be drawn to
+    let canvas = document.getElementById('the-canvas');
+
+    // get and use webgl 2, first line not strictly necessary but avoids issues
+    /** @type {WebGLRenderingContext} */
+    let gl = canvas.getContext('webgl2');
+
+    let file_name = 'teapot.obj';
+
+
+    // vertex shader
+    let vertex_source = 
+    `   #version 300 es
+        precision mediump float;
+
+        uniform mat4 modelview;
+
+        in vec3 coordinates;
+        in vec4 color;
+
+        out vec4 v_color;
+
+        void main( void ) {
+            gl_Position = modelview * vec4( coordinates, 1.0 );
+            v_color = color;
+        }
+    `;
+
+
+    let fragment_source =
+    `   #version 300
+        precision mediump float;
+
+        in vec4 v_color;
+
+        out vec4 f_color;
+
+        void main( void ) {
+            f_color = v_color;
+        }
+    `;
+
+    prog = create_compile_and_link_program(gl, vertex_source, fragment_source);
+
+    var the_mesh = null;
+    function set_mesh (loaded_mesh) {
+        the_mesh = loaded_mesh;
+    };
+
+
+    
+    // clear canvas and make it purple
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clearColor ( 0.9, 0.9, 1.0, 1 );
+    gl.clear(gl.COLOR_BUFFER_BIT);
+   
+
+    if (the_mesh!=null) {
+        the_mesh.render(gl);
+    }
+
+    let rotation_amnt_xz = 0.0;
+
+    // start counting time
+    let last_update = performance.now();
+    let time_delta = 0;
+
+    // rotation speeds
+    const xz_rotation_speed = 0.25
+
+
+    render(performance.now())
+
+
+
+    // main loop
+    function render(now) {
+        // get frame
+        requestAnimationFrame(render);
+
+        // refresh canvas every frame
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // get change in time since last frame
+        time_delta = (now - last_update) / 1000;
+        last_update = performance.now()
+
+        // calc rotation ammount based on time difference and rotation speed
+        rotation_amnt_xz += xz_rotation_speed * time_delta;
+        rotation_amnt_xz %= 1.0;
+
+
+        // get all 3 rotatin matracies and multiply them together
+        //let model = Mat4.rotation_yz(rotation_amnt_xz);
+
+        // send rotation matrix to GPU for application to vertex list
+        //set_uniform_matrix4(gl, shader_program,"modelview",model.data);
+
+        //Mesh.from_obj_file(gl, file_name, prog, set_mesh(the_mesh))
+        let box = Mesh.box(gl, prog, 1,1,1)
+
+        /*
+        if (the_mesh!=null) {
+            the_mesh.render(gl);
+        }
+        */     
+    }    
+    
+    </script>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #the-canvas { border: 1px solid darkblue; }
+        </style>
+    </head>
+
+    <body>
+        <canvas id = "the-canvas" width = "800" height = "600"></canvas>
+        <script src = "lib.js"></script>
+
+        <script src="matrix_template.js" ></script>
+        <script src="vector_template.js" ></script>
+                 
+        <script>
+            let canvas = document.getElementById( 'the-canvas' );
+            
+            /** @type {WebGLRenderingContext} */
+            let gl = canvas.getContext( 'webgl2' );
+
+            let verts = [ 
+                -0.5, -0.5, 0.0,    	1.0, 0.0, 0.0, 1.0,
+                0.5, -0.5, 0.0,        	0.0, 1.0, 0.0, 1.0,
+                0.5, 0.5, 0.0,    		0.0, 0.0, 1.0, 1.0, 
+				0.5, 0.5, 0.0,    		0.0, 0.0, 1.0, 1.0, 
+                -0.5, 0.5, 0.0,        	1.0, 1.0, 0.0, 1.0,
+                -0.5, -0.5, 0.0,    	1.0, 0.0, 0.0, 1.0, 
+            ];
+
+            let vertex_buffer = create_and_load_vertex_buffer(gl, verts, gl.STATIC_DRAW);
+            
+            let vertex_source = 
+    `   #version 300 es
+        precision mediump float;
+
+        uniform mat4 modelview;
+
+        in vec3 coordinates;
+        in vec4 color;
+
+        out vec4 v_color;
+
+        void main( void ) {
+            gl_Position = modelview * vec4( coordinates, 1.0 );
+            v_color = color;
+        }
+    `;
+            
+            let fragment_source = 
+            `   #version 300 es
+                precision mediump float;
+
+                in vec4 v_color;
+
+                out vec4 f_color;
+
+                void main( void ) {
+                    f_color = v_color;
+                }
+            `;
+
+            let shader_program = 
+                create_compile_and_link_program( gl, vertex_source, fragment_source );
+            gl.useProgram( shader_program );
+
+            VERTEX_STRIDE = 28;
+
+            set_vertex_attrib_to_buffer( 
+                gl, shader_program, 
+                "coordinates", 
+                vertex_buffer, 3, 
+                gl.FLOAT, false, VERTEX_STRIDE, 0 
+            );
+
+            set_vertex_attrib_to_buffer( 
+                gl, shader_program, 
+                "color", 
+                vertex_buffer, 4, 
+                gl.FLOAT, false, VERTEX_STRIDE, 12
+            );
+
+            set_render_params( gl );
+            
+			gl.clear( gl.COLOR_BUFFER_BIT );
+            
+
+            gl.drawArrays( gl.TRIANGLES, 0, 6 );
+
+            let rotation_amnt_xz = 0.0;
+    let rotation_amnt_xy = 0.0;
+    let rotation_amnt_yz = 0.0;
+
+
+    let last_update = performance.now();
+    let time_delta = 0;
+    //console.log(now);
+
+    // rotation speeds
+    const xz_rotation_speed = 0.5;
+    const xy_rotation_speed = 0.25;
+    const yz_rotation_speed = 0.05;
+
+    render(performance.now())
+
+
+    // main loop
+    function render(now) {
+        //console.log("in loop");
+        requestAnimationFrame(render);
+
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        time_delta = (now - last_update) / 1000;
+        last_update = performance.now()
+
+        rotation_amnt_xz += xz_rotation_speed * time_delta;
+        rotation_amnt_xz %= 1.0;
+        rotation_amnt_xy += xy_rotation_speed * time_delta;
+        rotation_amnt_xy %= 1.0;
+        rotation_amnt_yz += yz_rotation_speed * time_delta;
+        rotation_amnt_yz %= 1.0;
+
+        let model = Mat4.rotation_xy(rotation_amnt_xy);
+        xz = Mat4.rotation_xz(rotation_amnt_xz);
+        yz = Mat4.rotation_yz(rotation_amnt_yz);
+        model = model.mul(xz);
+        model = model.mul(yz);
+        console.log(model.toString());
+        set_uniform_matrix4(gl, shader_program,"modelview",model.data);
+
+
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+        
+    }
+
+    /** Sets uniform data for a row-major matrix4
+    @param {WebGLRenderingContext} gl
+    @param {WebGLProgram} program
+    @param {string} name
+    @param {number[]} data */
+    function set_uniform_matrix4( gl, program, name, data ) {
+        const loc = gl.getUniformLocation( program, name );
+        gl.uniformMatrix4fv( loc, true, data );
+}
+
+            //delete_program_and_attached_shaders( gl, shader_program );
+            //gl.deleteBuffer( vertex_buffer );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,140 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Assignment 5}
+\author{Ian Manix}
+
+\begin{document}
+\maketitle
+
+\section{Mapper-Reducer}
+\subsection{To Run}
+\label{subsec:run}
+
+Using the following command will take the input file and output the result to out.dat:
+\newline
+cat input.dat $|$ python3 mapper.py $|$ sort -k1,1 $|$ python3 reducer.py $>>$ out.dat
+\newline
+The \#! is set to /usr/bin/env python as in the slides, so you can replace python3 with ./ if that is correct on your machine. Mine is setup slightly differently so I ran it with python3 instead. sort -k1,1 us used because otehrwise sort dose not respect \_ characters for some reason. For example cat input.dat $|$ python3 mapper.py $|$ sort $|$ grep 7\_mm\_Rem -C 5 produces:
+\newline
+\newline
+7L\_\%26\_Esoteric	8	58434	F
+\newline
+7L\_\%26\_Esoteric	8	58434	T
+\newline
+7\_(Madness\_album)	1	10155	F
+\newline
+7\_(Madness\_album)	1	10155	T
+\newline
+7\_(Madness\_album)	1	10155	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7mm\_Remington\_Magnum	4	30561	F
+\newline
+7mm\_Remington\_Magnum	4	30561	T
+\newline
+7mm\_Remington\_Magnum	4	30561	T
+\newline
+7\_mm\_Remington\_Magnum	5	73675	F
+\newline
+7\_mm\_Remington\_Magnum	5	73675	T
+\newline
+7\_mm\_Remington\_Magnum	5	73675	T
+\newline
+7\_October	1	107333	F
+\newline
+7\_October	1	107333	T
+\newline
+7\_October	1	107333	T
+\newline
+7\_Seconds	7	83815	F
+\newline
+7\_Seconds	7	83815	F
+\newline
+\newline
+where as cat input.dat $|$ python3 mapper.py $|$ sort -k1,1 $|$ grep 7\_mm\_Rem -C 5 produces the correct
+\newline
+\newline
+7L\_\%26\_Esoteric	8	58434	F
+\newline
+7L\_\%26\_Esoteric	8	58434	T
+\newline
+7\_(Madness\_album)	1	10155	F
+\newline
+7\_(Madness\_album)	1	10155	T
+\newline
+7\_(Madness\_album)	1	10155	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7\_mm\_Remington\_Magnum	29	307038	T
+\newline
+7\_mm\_Remington\_Magnum	5	73675	F
+\newline
+7\_mm\_Remington\_Magnum	5	73675	T
+\newline
+7\_mm\_Remington\_Magnum	5	73675	T
+\newline
+7mm\_Remington\_Magnum	4	30561	F
+\newline
+7mm\_Remington\_Magnum	4	30561	T
+\newline
+7mm\_Remington\_Magnum	4	30561	
+\newline
+7\_October	1	107333	F
+\newline
+7\_October	1	107333	T
+
+\subsection{The Proccess}
+There isn't much to talk about here due to the simplicity of the assignmnet. For this project what I did is implement the skeleton code provided in the slides, then I modified the reducer to first skip lines that ended with 'F'. After that I added code to track the size in the exact same manner as the count was tracked, then ever time it prints the count it also prints the size one line down. The reducer was modified slightly to treat every line as a list of 4 strings and then to print those strings sepperated by tabs.
+
+\subsection{Example Output}
+Here is an example output of: cat input.dat $|$ python3 mapper.py $|$ sort. I've run it though the mapper for readability
+\newline
+\newline
+Zygomatic\_process\_of\_frontal\_bone    2    22177    F
+\newline
+Zygomatic\_process\_of\_frontal\_bone    2    22177    T
+\newline
+Zygomatic\_process\_of\_frontal\_bone    2    22177    T
+\newline
+\newline
+Here is what it looks like after being run though the reducer as well using the commands in the \hyperref[subsec:run]{To Run} subsection.:
+\newline
+\newline
+Zygomatic\_process\_of\_frontal\_bone\{size\}	44354
+\newline
+Zygomatic\_process\_of\_frontal\_bone\{visis\}	4
+
+\section{Hadoop}
+\subsection{Getting It Running}
+
+This was where I spend the majority of my time on this assignment. While I talk about the issues I had below, by following the instructions starting in part 2 I did eventually get hadoop working on by machine.
+
+\subsection{Issues}
+
+I ran into an issue with the hadoop instructions attempting the part 2 instillation. Specifically while the instructions do tell us to setup a ssh key to be able to connect to localhost with ssh, it was not clear that you needed to be connected to ssh for the hdfs commands to function. Without being connected I got a connection refused error, and spent the significant majority of my time attempting to solve this issue.
+\newline
+\newline
+A seperate issue I had unrelated to Hadoop in the instilation proccess is that during the proccess my VM ran out of storage, and in an attempt to expand it I inadvertantly deleted the file system. Fortunatlly all my code is backed up to git and I've had to rebuild the Ubuntu VM I use for codeing often enough that I've created a script to re-install everything on a fresh VM. This did however cost me several hours both in attempting to expand the VM's storage and the subsuquent rebuilding of the VM.
+
+\end{document}
