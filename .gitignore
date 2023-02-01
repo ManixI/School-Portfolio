@@ -1,3 +1,8 @@
 *.csv
 *.txt
 *.gz
+*.zip
+*.out
+*.png
+*.log
+*.aux
