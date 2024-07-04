@@ -1,0 +1,147 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Portfolio 1} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{Chapter 8}
+\begin{enumerate}
+  \item Proposition: let $m$ be an integer. Prove that if $m$ is odd then $\frac{m^4-1}{4}$ is even.\\
+        Suppose $m$ is an odd integer.\\
+        Then $m=2n+1$ by definition of an odd number.\\
+        Thus $\frac{m^4-1}{4}=\frac{(2n+1)^4-1}{4}=\frac{16n^4+32n^3+24n^2+8n}{4}=4n^4+8n^3+6n^2+2n$.\\
+        Then $4n^4+8n^3+6n^2+2n=2(2n^4+4n^3+3n^2+n)=2k$ where $k=2n^4+4n^3+3n^2+1$ and $k\in\mathbb{N}$.\\
+        Thus if $m$ is odd, $\frac{m^4-1}{4}$ must be even.
+
+  \item \begin{enumerate}
+      \item Proposition: prove that for all $p,q\in\mathbb{Q}$ with $p<q$, there exists $x\in\mathbb{Q}$ such that $p<x<q$.\\
+            Suppose for all $p,q\in\mathbb{Q}$, $p<q$.\\
+            Then there exists $x$ such that $x=\frac{p+q}{2}$.\\
+            So because $x$ is the arithmetic mean of $p$ and $q$, $p<x<q$.\\
+            Thus for all$p,q\in\mathbb{Q}$ with $p<q$, there exists $x\in\mathbb{Q}$ such that $p<x<q$.
+
+      \item Proposition: prove that there are infinitely many rational numbers between 0 and 1.\\
+            Suppose we have the set $\{\frac{1}{x}:x\in\mathbb{N}$ and $x\neq1\}$.\\
+            All the numbers in this set are rational by the definition of a rational number $\mathbb{Q}=\{x:x=\frac{m}{n}$, where $m,n\mathbb{Z}$ and $n\neq0\}$.\\
+            Then the set of all integers $\mathbb{N}$ is infinite by definition.\\
+            Therefor the set $\{\frac{1}{x}:x\in\mathbb{N}$ and $x\neq1\}$ contains infinitely many rational numbers.\\
+            Then the set $\{\frac{1}{x}:x\in\mathbb{N}$ and $x\neq1\}$ will always be less then 1 because it's largest value is $\frac{1}{2}$, with every subsequent value getting smaller.\\
+            And it will always be greater then 1 because there is no integer $x$ where $\frac{1}{x}\leq0$.\\
+            Therefore the set $\{\frac{1}{x}:x\in\mathbb{N}$ and $x\neq1\}$ describes an infinite number of rational numbers between 0 and 1.
+
+    \end{enumerate}
+  \item Let $a,b$ be natural numbers such $a^2=b^3$. Prove that if $a$ is even, then 4 divides $a$.\\
+        Suppose 4 dose not divide $a$.\\
+        Then $a=2b+2c+1$, where $b,c\in\mathbb{Z}$ and $c=0$ or $c=1$.\\
+        That is to say $a=4d+1$ or $a=4d+3$ for $d\in\mathbb{Z}$.\\
+        So $b^3(2b+2c+1)^2=4b^2+4c^2+8bc+4b+4c+1=4(b(b+c)+c(b+c)+b+c)+1=4m+1$ where $m\in\mathbb{Z}$.\\
+        Then because a perfect cube is either 1 mod 4 or -1 mod 4, $b^3$ cannot be in the form $4m+3$.\\
+        So $b^3=2(2m)+1$, meaning $b^3$ is odd by definition of an odd number.\\
+        Then $b$ is odd because an odd number cubed is odd.\\
+        So $(2b+2c+1)^2=(2x+1)^3$ where $x\in\mathbb{Z}$.\\
+        Thus $4b^2+4c^2+8kr+1=8x^3+12x^2+6x+1$.\\
+        Then subtract 1 from each side to get $4b^2+4c^2+8bc=8x^3+12x^2+6x$ or $2(2b^2+2c^2+4bc)=2(4x^3+6x^2+3x)$.\\
+        Thus $2y=2z$ where $y,z\in\mathbb{Z}$.\\
+        Thus both sides are even, but this contradicts the fact that $a=4d+1$ or $a=4d+3$, thus $a$ cannot be in this form.\\
+        Thus assuming $a^2=b^3$, if $a$ is even then 4 bust divide $a$.
+
+
+
+
+  \item Prove that if a natural number is divisible by 4, then it is a difference in perfect squares.
+        Suppose $x\in\mathbb{Z}$ and $x$ is divisible by 4.\\
+        Then $x=4a$ by definition of divisibility.\\
+        Then $x=4k+1-1+k^2-k^2=(k^2+2k+1)-(k^2-2k+1)=(k+1)^2-(k-1)^2=m^2-n^2$ where $m,n\in\mathbb{Z}$.\\
+        Therefor if $x$ is divisible by 4 then $x=m^2-n^2$, meaning if $x$ is divisible by 4 it can be written as the difference of two perfect squares.
+\end{enumerate}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

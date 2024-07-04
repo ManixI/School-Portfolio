@@ -1,0 +1,68 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{apacite}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage{fontenc}
+%\usepackage{fontspec}
+\usepackage{amsmath}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=SQL}
+
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+    \begin{FlushLeft}
+        Ian Manix
+
+        Uncertainty
+
+        April 26, 2023
+    \end{FlushLeft}
+
+
+    \section*{1}
+
+    \begin{enumerate}[a)]
+        \item   (0,0):0 - 0+0+0.05 = 0.05 -> 1 ER=-1, bias -= 0.05 \\
+                (0,1):0 - 0+0.1+0  = 0.05 -> 1 ER=-1, bias -= 0.05 \\
+                (1,0):0 - (-0.1)+0+(-0.05) = -0.15 -> 0 ER=0, bias unchanged \\
+                (1,1):1 - (-0.1)+0.1+(-0.05) = -0.05 -> 0 ER=1, bias += 0.05 \\
+                resulting bias is 0
+
+        \item   No, weights of 0.09 and 0.09 would work: \\
+                (0,0):0 = 0.05 -> 1, bias -= 0.05 \\
+                (1,0):0 = 0.04 -> 1, bias -= 0.05 \\
+                (1,0):0 = -0.01 -> 0, bias unchanged \\
+                (1,1):1 = -0.23 -> 0, bias unchanged \\
+                resulting bias is -0.05
+
+        \item   No, there are a verity of combinations that would result in a similar outcome, as long as each weight is 0.1 > w > 0.05 they will correctly train to represent logical AND with the other specified parameters. 
+    \end{enumerate}
+
+
+    \section*{2}
+
+    \begin{enumerate}[a)]
+        \item   (3,3): 0.807 \\
+                (3,2): 0.691 \\
+                (3,1): 0.617 \\
+                (4,1): 0.355
+        \item   (3,3): move up \\
+                (3,2): move left \\
+                (3,1): move up \\
+                (4,1): move down
+    \end{enumerate}
+
+
+\end{document}
+\endinput

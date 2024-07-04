@@ -1,0 +1,92 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+{}
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Preparation 11} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+
+\begin{enumerate}
+  \item The domain is $\{n\in\mathbb{R}\}$, the range is $\{m\in\mathbb{R}:n>0\}$, the relation is $\{(x, e^x):x\in\mathbb{R}\}\subseteq\mathbb{R}$.
+  \item Injective, there are no two different values of x where $f(x)=f(x')$. It is not surjective (and thus not bijective) because while $x\in\mathbb{R}$, $f(x)>0$.
+  \item $\{(x,x):x\in\mathbb{Z}\}\subseteq\mathbb{Z}$.
+\end{enumerate}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

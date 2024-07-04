@@ -1,0 +1,136 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 4} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+
+\begin{itemize}
+  \item[1.] Proposition: if $x$ is even, then $x^2$ is even.\\
+            Suppose $x$ is even \\
+            Then $x=2a$ for some $a\in \mathbb{Z}$ by definition of an even number \\
+            Thus $x^{2}=(2a)^2=4a^2$ \\
+            So $x^2=2b$ where $b=2a^2$ \\
+            And $b\in \mathbb{Z}$ because of fact 4.1
+            Therefore $x^2 is even$\\
+
+  \item[3.] Proposition: if $a$ is an odd integer, then $a^{2}+3a+5$ is odd\\
+            Suppose $a$ is odd \\
+            Then $a=2b+1$ where $b\in \mathbb{Z}$ by definition of an odd number\\
+            Therefor $a^{2}+3a+5=(2b+1)^2+3(2b+1)+3=4b^{2}+10b+7=2(2b^{2}+5b)+1+6$\\
+            So $a^{2}+3a+5=2c+1+6$ where $c=2b^{2}+5b$ \\
+            And $c \in \mathbb{Z}$ because of fact 4.1 \\
+            Then because 6 is even we can say $6=2d$ where $d\in \mathbb{Z}$\\
+            Thus $a^{2}+3a+5=2c+1+2d=2(c+d)+1=2(e)+1$ where $e\in \mathbb{Z}$\\
+            Therefore $a^{2}+3a+5$ is odd if $a$ is odd.\\
+
+  \item[5.] Proposition: Suppose $x,y\in \mathbb{Z}$. If $x$ and $y$ are even, then $xy$ is even\\
+            Suppose $x,y\in \mathbb{Z}$ and $x,y$ are even \\
+            Then $x=2a$ and $y=2b$ where $a,b \in \mathbb{Z}$ by definition of an even number\\
+            Thus $xy=(2a)(2b)=4ab=2(2ab)$\\
+            So $xy=2c$ where $c=2ab$ and $c\in \mathbb{Z}$ because of fact 4.1\\
+            Therefor $xy is even$\\
+
+  \item[6.] Proposition: Suppose $a,b,c\in \mathbb{Z}$. If $a|b$ and $a|c$ then $a|b+c$\\
+            Suppose $a,b,c\in \mathbb{Z}$\\
+            Then $b=na$ and $b=ma$ where $n,m\in \mathbb{Z}$ by definition 4.4\\
+            So $b+c=na+ma=a(n+m)=a(x)$ where $x\in\mathbb{X}$ by fact 4.1\\
+            Therefor if $b+c=a(x)$ then $a|b+c$\\
+
+            \clearpage
+  \item[9.] Proposition: Suppose $a$ is an integer. If $5|2a$ then $5|a$\\
+            Suppose $a\in\mathbb{Z}$\\
+            If $5|a$ then $a=5n$ where $n\in\mathbb{Z}$ by definition 4.4\\
+            Then $2a=2(5n)=5m$ where $m=n2$ and $m\in\mathbb{Z}$ by fact 4.1\\
+            Therefor $2a=5m$ or $5|2a$\\
+
+  \item[11.] Proposition: Suppose $a,b,c,d\in\mathbb{Z}$. If $a|b$ and $c|d$, then $ac|bd$\\
+            Suppose $a,b,c,d\in\mathbb{Z}$ and $a|b$, $c|d$\\
+            Then $b=na$ and $d=mc$ where $n,m\in\mathbb{Z}$ by definition 4.4\\
+            Thus $bd=(na)(mc)=nm(ac)$\\
+            And $x=nm$ where $\in\mathbb{Z}$ by fact 4.1\\
+            Then $bd=x(ac)$\\
+            Therefor $ac|bd$\\
+
+\end{itemize}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

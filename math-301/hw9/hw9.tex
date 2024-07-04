@@ -1,0 +1,114 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 9} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{Chapter 10}
+\begin{itemize}
+  \item[3.] Proposition: prove that $1^3 + 2^3 + 3^3 + ... + n^3=\frac{n^2(n+1)^2}{4}$ for every positive integer n.\\
+            $1^3=\frac{1^2(1+1)^2}{4}=1$\\
+            Now suppose $\sum_{n=1}^{m}n^3=\frac{n^2(n+1)^2}{4}$\\
+            Then $\sum_{n=1}^{m}n^3+(n+1)^3=\frac{n^2(n+1)^2}{4}+(n+1)^3$\\
+
+
+  \item[4.] Proposition: if $n\in\mathbb{N}$ then $1*2+2*3+3+4+...+n(n+1)=\frac{n(n+1)(n+2)}{3}$.\\
+
+  \item[5.] Proposition: If $n\in\mathbb{N}$, then $2^1+2+2+2+6+...+2^n=2^{n+1}-2$.\\
+
+  \item[8.] Proposition: if $n\in\mathbb{N}$, then $\frac{1}{2!}+\frac{2}{3!}+\frac{3}{4!}=1-\frac{1}{(n+1)!}$\\
+
+  \item[11.] Proposition: prove that $3|(n^3+5n+6)$ for every integer $n\geq 0$\\
+
+\end{itemize}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

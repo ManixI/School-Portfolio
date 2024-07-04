@@ -1,0 +1,98 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{apacite}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage{fontenc}
+%\usepackage{fontspec}
+\usepackage{amsmath}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=SQL}
+
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+    \begin{FlushLeft}
+        Ian Manix
+
+        Uncertainty
+
+        April 5, 2023
+    \end{FlushLeft}
+
+
+    \section*{1}
+
+    There are 24 distinct events: \\
+    \begin{center}
+    \begin{tabular} {| c | c | c | c | c | c | c |}
+        \hline
+        & 1 & 2 & 3 & 4 & 5 & 6 \\
+        \hline
+        HH & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+        HT & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+        TH & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+        TT & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+    \end{tabular}
+    \end{center}
+
+
+    \section*{2}
+
+    here are 16 distinct events: \\
+    \begin{center}
+    \begin{tabular} {| c | c | c | c | c | c | c |}
+        \hline
+        & 1 & 2 & 3 & 4 & 5 & 6 \\
+        \hline
+        HH & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+        HT & 1/12 & 1/12 & 1/12 & 1/12 & 1/12 & 1/12 \\
+        \hline
+        TT & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 & 1/24 \\
+        \hline
+    \end{tabular}
+    \end{center}
+    HT is indistinguishable from TH in this scenario
+
+    \section*{3}
+   
+    \begin{enumerate}[a)]
+      
+        % 1
+        \item $P(C|P=a,s)$
+        \item yes, the odds are: 0.06
+        \item No, we can't determine this because we have no way of determining $P(x)$ or $P(xC)$. If we knew one of those we could calculate $P(C|x,S,P=a)$.
+            
+    \end{enumerate}
+
+    \section{4}
+
+    \begin{enumerate}[a)]
+      
+        % 1
+        \item $P(yummy) = 0.4$, $P(\neg yummy) = 0.6$
+        \item $P(olivs|yummy) = 0.5 $, $P(olives|\neg yummy) = 0.4$
+        \item $P(yummy | ham, cheese, \neg pinapple, \neg olives) = 0.123$ \\
+            $P(Y|H, C, \neg P, \neg O = \dfrac{P(Y)*P(H|Y)*P(C|Y)*P(\neg P|Y) * P(\neg O|Y)}
+            {P(H)*P(C)*P(\neg O)*P(\neg P)}$ 
+            
+    \end{enumerate}
+
+
+
+\end{document}
+\endinput

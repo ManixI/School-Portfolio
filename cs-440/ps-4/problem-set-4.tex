@@ -1,0 +1,71 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{apacite}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage{fontenc}
+%\usepackage{fontspec}
+\usepackage{amsmath}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=SQL}
+
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+    \begin{FlushLeft}
+        Ian Manix
+
+        Problem Set 4
+
+        March 20, 2023
+    \end{FlushLeft}
+
+
+    \section*{1}
+
+    \begin{enumerate}
+      
+        % 1
+        \item $\neg{C}$
+        \item $P \implies C$
+        \item $Sw \implies Sp$ 
+        \item $(Sw \land T) \implies P$
+        \item $(Sw \lor W) \implies C$
+      
+    \end{enumerate}
+
+    \section*{2}
+
+    \begin{enumerate}
+      
+        % 1
+        \item $\neg{C}$
+        \item $\neg{P} \lor C$
+        \item $\neg{Sw} \lor Sp$ 
+        \item $\neg{Sw} \lor \neg{T} \lor P$
+        \item $\neg{Sw} \land \neg{W} \lor C$
+      
+    \end{enumerate}
+
+    \section*{3}
+
+    \begin{enumerate}
+
+        \item $(C, P, Sw, Sp)$: \\
+            $(0, 0, 1, 0)$ \\
+            $(0, 0, 0, 1)$
+
+        \item The statement is entailed in the knowledge base. The statement translates to $\neg{Sp} \implies C$, or in CNF, $Sp \lor C$. while Sp will always be false in our knowledge base, C can be true, thus the statement is a valid statement within the knowledge base.
+    \end{enumerate}
+
+
+
+\end{document}
+\endinput

@@ -1,0 +1,158 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Portfolio 2} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\begin{enumerate}
+  \item Consider a right triangle with hypotenuse of length c, and sides of length $a$ and $b$. Prove that this triangle is isosceles if and only if its area is $\frac{c^2}{4}$.\\
+        Suppose there is a right isosceles triangle.\\
+        Then it's legs $a$ and $b$ must be of equal length x.\\
+        So $c^2=x^2+x^2$, or $c=\sqrt{2x^2}$.\\
+        It's area can be written as $A=x*x*\frac{1}{2}=\frac{x^2}{2}$.\\
+        Then $c^2=a^2+b^2=2x^2$ by the Pythagorean theorem.\\
+        So $\frac{c^2}{2}=x^2$, then substituting $x^2$ in the formula for the area of the triangle we get $A=\frac{1}{2}*\frac{c^2}{2}=\frac{c^2}{4}$.\\
+        Then suppose there is a triangle with area $A=\frac{c^2}{4}$.\\
+        %The area of the triangle can be written as $\frac{c^2}{4}=\frac{1}{2}\frac{c}{2}b+\frac{1}{2}\frac{c}{2}a$.\\
+
+        %The area of this triangle can be written as $A=\frac{c^2}{4}=\frac{1}{2}ab$ where $a$ and $b$ are the legs of the triangle.\\
+        %So multiply both sides by 2 as we get $\frac{c^2}{2}=ab$.\\
+        %Because it is a triangle we also know that $c^2=a^2+b^2$.\\% which can be written as $a=\sqrt{c^2-b^2}$ or $ab=b\sqrt{c^2-b^2}$.\\
+        %Substituting the value of the area we get $\frac{c^2}{2}=b\sqrt{c^2-b^2}$.\\
+        %Squaring both sides gives us $\frac{c^4}{4}=b^2(c^2-b^2)$
+        %Dividing by 2 we can substitute $c^2$ to get $ab=\frac{a^2+b^2}{2}$.\\
+        %This becomes $2ab=a^2+b^2$.\\
+        %$2b=a+\frac{b^2}{a}$.\\
+        %$2ab-b^2=b(2a-b)=a^2$.\\
+
+
+  \item For all integers $a$ and $b$, $a\equiv b\mod 5$ of and only if $(a+3b)\equiv(3a+b)\mod 10$.\\
+        Let $a\equiv b\mod 5$.\\
+        Then $b-a=5n$ where $n\in\mathbb{Z}$ by definition of divisibility.\\
+        So $(a+3b)-(3a+b)=-2a+2b=2(b-a)$.\\
+        Thus $10n=(a+3b)-(3a+b)$, showing $10|(a+3b)-(3a+b)$.\\
+        Therefor $(a+3b)\equiv(3a+b)\mod 10$.\\
+        Then let $(a+3b)\equiv(3a+b)\mod 10$.\\
+        This means $2(b-a)=10n$ where $n\in\mathbb{Z}$.\\
+        Then it follows that $b-a=5n$, therefor $a\equiv b\mod 5$.
+        Thus because $a\equiv b\mod 5$ implies $(a+3b)\equiv(3a+b)\mod 10$ and $(a+3b)\equiv(3a+b)\mod 10$ implies $a\equiv b\mod 5$, $a\equiv b\mod 5$ if and only if $(a+3b)\equiv(3a+b)\mod 10$.
+
+  \item Let $A,B,C$ be nonempty sets. Prove that if $A\cup C=B\cup C$, and $A\cap C=B\cap C$, then $A=B$.\\
+        Let $A,B,C$ be nonempty sets where $A\cup C=B\cup C$, and $A\cap C=B\cap C$.\\
+        Then let $x\in A$.\\
+        So because $x\in A\cup C$ and $A\cup C=B\cup C$, then $x\in B$ or $x\in C$.\\
+        If $x\in C$, then $x\in A\cap C$ by definition of intersection.\\
+        Thus $x\in B\cap C$, so $x\in B$ by definition of intersection.\\
+        So $x\in B$ for either case, and therefor $A\subseteq B$.\\
+        Then let $y\in B$.\\
+        So because $y\in B\cup C$ and $A\cup C=B\cup C$, then $y\in A$ or $y\in C$.\\
+        If $y\in C$, then $y\in B\cap C$ by definition of intersection.\\
+        Thus $y\in A\cap C$, so $y\in A$ by definition of intersection.\\
+        So $y\in A$ for either case, and therefor $B\subseteq A$.\\
+        Therefor because $A\subseteq B$ and $B\subseteq A$, $A=B$.
+
+  \item Let $U$ be a universe of sets, and let $X,Y$ be any subsets of $U$. Define a relations $X~Y$ if and only if there exists a bijection $f:X\rightarrow Y$. Prove that ~ is an equivalence relation on subsets of $U$. \\
+        First, for any subset of $X$ of $U$, the identity function $f:X\rightarrow X$, defined by $f(x)=x$ for all $x\in X$, is a bijection from X to itself.\\
+        Therefor $X~X$, meaning it is reflexive.\\
+        Next, suppose there exists a bijection $f:X\rightarrow Y$.\\
+        There then must be an inverse $f^{-1}:Y\rightarrow X$.\\
+        So there exists a bijection from $X$ to $Y$, so $Y~X$ whenever $X~Y$.\\
+        meaning it is symmetrical.\\
+        Finally, suppose there exists the bijection $f:X\rightarrow Y$ and the bijection $g:Y\rightarrow Z$.\\
+        So the composition of $f\circ f:X\rightarrow Z$ is a bijection from $X$ to $Z$.\\
+        Therefor $X~Z$ whenever $X~Y$ and $Y~Z$, thus it is transitive.\\
+        Because the bijection is reflexive, symmetrical, and transitive $~$ is an equivalence relation onto subsets of $U$.
+\end{enumerate}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+\\
+\\
+JUDSON, T. (2023). Abstract algebra: Theory and applications. ORTHOGONAL PUBLISHING L3C. 
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

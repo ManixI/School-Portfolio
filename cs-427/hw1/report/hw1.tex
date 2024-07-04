@@ -1,0 +1,616 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage[htt]{hyphenat}
+\usepackage{pdfpages}
+
+%% from https://tex.stackexchange.com/questions/33459/how-to-deal-with-very-long-lines-that-do-not-contain-spaces
+\makeatletter
+{\obeylines\gdef\bt@eol{^^M}}
+\newenvironment{breakabletexttt}
+  {\ttfamily\hfuzz=0.4em
+   \list{}{\leftmargin=2em
+           \itemindent=-\leftmargin
+           \listparindent=-\leftmargin
+           \parsep=0pt}
+   \item\relax\obeylines\obeyspaces\expandafter\breakable@texttt\@gobble}
+  {\endlist}
+\def\breakable@texttt{\futurelet\@let@token\breakable@texttti}
+\def\breakable@texttti#1{%
+  \ifx\@let@token\end
+  \expandafter\end
+  \else
+    \expandafter\ifx\bt@eol\@let@token
+      \par
+    \else
+      \string#1\hskip1sp
+    \fi
+    \expandafter\breakable@texttt
+  \fi}
+\makeatother
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 1} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{1}
+An example of confidentiality is protecting the amount a person has in their account from other people. This is relatively important but less so the the other requirements in this scenario. An example of integrate is that the ATM must accurately accept and dispense money. It should accurately record the amount deposited and dispense the same amount that the user withdraws. This is the most important requirement of the ones mentioned here as it is the key function of the ATM. An availability requirement would be the ATM always having enough cash on hand to dispense. While failing this requirement means the user cannot retrieve the money they expect too, this is a less important requirement as in most cases represents an inconvenience to the user, and not a significant harm.
+
+\section*{2}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c| }
+\hline
+ & Release of & Traffic & Masquerade & Replay & Modification & DoS \\
+ & Message & Analysis & & & & \\
+ & Content & & & & & \\
+\hline
+Peer Entity & & & X & & & \\
+Authentication & & & & & & \\
+\hline
+Data Origin & & & X & & & X \\
+Authentication & & & & & &  \\
+\hline
+Access Control & & & X & & & X \\
+\hline
+Confidentiality & X & & & & & \\
+\hline
+Traffic Flow & & X & & & & \\
+Confidentiality & & & & & & \\
+\hline
+Data Integrity & & & & X & X & \\
+\hline
+Non-repudiation & & & X & & & \\
+\hline
+Availability & & & & & & X \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{3}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c| }
+\hline
+ & Release of & Traffic & Masquerade & Replay & Modification & DoS \\
+ & Message & Analysis & & & & \\
+ & Content & & & & & \\
+\hline
+Encryption & X & & & & & \\
+\hline
+Digital Signature & & & X & X & X & \\
+\hline
+Access Control & & & & & & \\
+\hline
+Data Integrity & & & & X & X & \\
+\hline
+Authentication & & & X & X & & X \\
+Exchange & & & & & & \\
+\hline
+Traffic Padding & & X & & & & \\
+\hline
+Routing Control & X & X & & & & \\
+\hline
+Notarization & & & X & X & X & \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{4}
+\begin{enumerate}%[label=(\alph*)]
+  \item[a.] The scheme is secure, as good encryption algorithms assume the algorithm is public knowledge
+  \item[b.] This is not very secure as it is easier to reverse engineer an algorithm knowing the key then the reverse.
+  \item[c.] Substitution where you change one letter to another, and permutation where you rearrange the order of the letters.
+  \item[d.] Monoalphabetic only use one cypher alphabet per letter, polyalphabetic use multiple cipher alphabets per letter
+  \item[e.] The first is brute force, checking every possible key until you find one that makes sense. The second is cryptanalytic, where you use your knowledge of the the algorithm to try and break the cipher
+\end{enumerate}
+
+\section*{5}
+This results in a monoalphabetic substitution cipher.
+
+\section*{6}
+The decyphered text is: \\
+\begin{breakabletexttt}
+YAHOO ISP LANNINGON COMBATING SPAM BY REQUIRING EMAIL TO BE AUTHENTICATED THE PROBLEM THEY CLAIM IS THAT THERES NO WAY OF KNOWING WHO THE SENDER REALLY IS IT SEEMS OBVIOUS TO ME THAT THIS WONT STOP SPAM AT ALL SPAMMERS ARE ALREADY BREAKING INTO COMPUTERS AND HIJACKING LEGITIMATE USERS EMAIL SYSTEMS SPAMMERS ARE ALREADY SENDING MAIL OUT OF RANDOM COUNTRIES AND STOLEN ACCOUNTS HOW EXACTLY WILL THIS MAKE THINGS BETTER
+\end{breakabletexttt}
+
+I achieved this via a brute force attack. Because it was only a shift cipher, I wrote a program to print all 25 possible shifted texts, and just pulled out the one that had readable text in it, then added in spaces as made sense.
+
+\section*{7}
+The decyphered text is: \\
+\begin{breakabletexttt}
+MOUNT ST HELENS IS AN ACTIVE STRATOVOLCANO LOCATED IN SBAMANIA COUNTY WASHINGTON IN THE PACIFIC NORTHWEST REGION OF THE UNITED STATES MOUNT ST HELENS TABES ITS ENGLISH NAME FROM THE JRITISHDIPLOMAT LORDS THE LENSA FRIEND OF EXPLORER GEORGE VANCOUVER WHO MADE A SURVEY OF THE AREA IN THE LATE EIGHTEENTH CENTURY THE VOLCANO IS LOCATED IN THE CASCADE RANGE AND IS PART OF THE CASCADE VOLCAN ICARCASEGMENTOFTHEPACIFICRINGOFFIR ETHATINCLUDESOVERONEHUNDREDANDSIXTYACTIVEVOLCANOESTHISVOLCANOISWELLBNOWNFORITSASHEXPLOSIONSANDPYROCLASTICFLOWSMOUNTSTHELENSISMOSTNOTORIOUSFORITSMAZORNINETEENEIGHTYERUPTIONTHEDEADLIESTANDMOSTECONOMICALLYDESTRUCTIVEVOLCANICEVENTINTHEHISTORYOFTHEUNITEDSTATESFIFTYSEVENPEOPLEWEREBILLEDTWOHUNDREDANDFIFTYHOMESFORTYSEVENJRIDGESFIFTEENMILESOFRAILWAYSANDONEHUNDREDANDEIGHTYFIVEMILESOFHIGHWAYWEREDESTROYEDAMASSIVEDEJRISAVALANCHETRIGGEREDJYANEARTHKUABECAUSEDANERUPTIONTHATREDUCEDTHEELEVATIONOFTHEMOUNTAINSSUMMITJYOVERONETHOUSANDFEETLEAVINGAONEMILEWIDEHORSESHOESHAPEDCRATERTHEMOUNTSTHELENSNATIONALVOLCANICMONUMENTWASCREATEDTOPRESERVETHEVOLCANOANDALLOWFORITSAFTERMATHTOJESCIENTIFICALLYSTUDIEDDURINGTHEWINTEROFNINETEENEIGHTYNINETEENEIGHTYONEANEWGLACIERAPPEAREDNOWOFFICIALLYNAMEDCRATERGLACIERITWASFORMERLYBNOWNASTHETULUTSONGLACIERSHADOWEDJYTHECRATERWALLSANDFEDJYHEAVYSNOWFALLANDREPEATEDSNOWAVALANCHESITGREWRAPIDLYJYTWOTHOUSANDFOURITCOVEREDAJOUTPOINTTHIRTYSIXSKUAREMILESAN DWASDIVIDEDJYTHEDOMEINTOAWESTERNANDEASTERNLOJETYPICALLYJYLATESUMMERTHEGLACIERLOOBSDARBFROMROCBFALLFROMTHECRATERWALLSANDASHFROMERUPTIONSASOFTWOTHOUSANDSIXTHEICEHADANAVERAGETHICBNESSOFTHREEHUNDREDFEETANDAMAXIMUMOFSIXHUNDREDANDFIFTYFEETNEARLYASDEEPASTHEMUCHOLDERANDLARGERCARJONGLACIEROFMOUNTRAINIERTHEICEISALLPOSTNINETEENEIGHTYMABINGTHEGLACIERVERYYOUNGGEOLOGICALLYHOWEVERTHEVOLUMEOFTHENEWGLACIERISAJOUTTHESAMEASALLTHEPRENINETEENEIGHTYGLACIERSCOMJINED 
+\end{breakabletexttt}
+
+To find this I first wrote code to count the occurrence of each letter in the cypher text. This showed the most common characters in order were S, I, W, T, A. Initially I matched these up with E, T, A, O, I. From there I started looking at bigrams, something my code also counted. For example The most common bigram was 'WY'. Given it was such a common bigram I guessed that 'W' and not 'I' was 'T' (I assumed 'I' was 'A' instead), and that 'Y' was 'H'. This also made 'S' become 'E' as 'YS' was the second most common bigram and it matched up with the single letter analyses. I guessed 'P' was 'R' following similar logic. I essentially followed this chain of thinking to guess most of the letters, and the last few I just swapped around until I found something that looked correct.
+
+\section*{8}
+The dectyphered text is: \\
+\begin{breakabletexttt}
+MAGINETH IS SITUATION AN ENGINEER BUILDS A BRIDGE IT STANDS FOR A DAY AND THEN COLLAPSE SHE BUILDS ANOTHER IT STANDS FOR THREE DAYS AND THEN COLLAPSES THENH BUILDS A THIRD WHICH STANDSFORTWOWEEKSBUTCOLLAPSESDURINGTHEFIRSTRAINSTORMSOHEBUILDSAFOURTHITSBEENSTANDINGFORAMONTHANDHASSURVIVEDTWORAINSTORMSDOYOUBELIEVETHISFOURTHBRIDGEISSTRONGSECUREANDSAFEORISITMORELIKELYJUSTANOTHERACCIDENTWAITINGTOHAPPENASBIZARREASITMAYSEEMTHISKINDOFDESIGNPROCESSHAPPENSALLTHETIMEINCRYPTOGRAPHYAFIELDTHATISFULLOFPEOPLEWHOLOVETODESIGNTHEIROWNALGORITHWIANDPROTOCOLSWITHSOMANYASPIRINGCRYPTANALYSTSOUTTHEREHOWEVERTHERESBOUNDTOBEALOTOFWEAKDESIGNSTHEPROBLEMISTHISANYONENOMATTERHOWUNSKILLEDCANDESIGNANALGORITHMTHATHEHIMSELFCANNOTBREAKTHOUGHACOMPETENTCRYPTANALYSTCANBREAKMOSTOFTHISSTUFFAFTERASHORTREVIEWTHERESTOFITSURVIVESANDINMOSTCASESISNEVERLOOKEDATAGAINESPECIALLYOUTSIDETHEMILITARYWORLDBUTJUSTBECAUSEANALGORITHMSURVIVESANINITIALREVIEWISNOREASONTOTRUSTITIHADACLIENTONCEWHODESPERATELYWANTEDTODESIGNHISOWNENCRYPTIONALGORITHMHEHADNOCRYPTOGRAPHICTRAININGNOEXPERIENCEANALYZINGOTHERALGORITHMSHEWASADESIGNERHESAIDNOTANANALYSTSOCOUNTERPANEDIDHISANALYSISFORHIMANDWEBROKEHISALGORITHMINADAYHEFIXEDITANDSENTITBACKANDWEBROKEITINTWODAYSHEFIXEDITANDSENTITBACKAGAINANDWEBROKEITAGAINFINALLYTHEFOURTHVERSIONOFHISALGORITHMRESISTEDOURATTEMPTSATCRYPTANALYSISATLEASTFORFOURTYHOURSBUTTHATDOESNTMEANTHATITSNOTSTILLFLAWEDORTHATITCANTBEBROKENGIVENENOUGHTIMEANDRESOURCESUNFORTUNATELYINTHEWORLDOFCRYPTOGRAPHYDIFFERENTISBADCRYPTOGRAPHYISATITSBESTWHENITISCONSERVATIVEANDTHECONSERVATIVEAPPROACHISTOCHOOSEANALGORITHMTHATHASTHATHASALREADYBEENANALYZEDTHEADMONITIONNOTTOPUTALLYOUREGGSINONEBASKETDOESNOTAPPLYINTHISCASETHESECURITYOFASYSTEMISTHESECURITYOFITSWEAKESTCOMPONENTSINCETHEWEAKESTCOMPONENTBREAKSTHEENTIRESYSTEMINCRYPTOGRAPHYTHEREISSECURITYINFOLLOWINGTHECROWDAHOMEGROWNALGORITHMCANTPOSSIBLYBESUBJECTEDTOTHEHUNDREDSOFTHOUSANDSOFHOURSOFANALYSISTHATDESANDTRIPLEDESHAVEBEENSUBJECTEDTOACOMPANYJUSTCANTMOBILIZETHERESOURCESTHATAREBEINGBROUGHTTOBEARAGAINSTTHEAESCANDIDATESORTHEIPSECINTERNETSECURITYPROTOCOLNOONECANDUPLICATETHECONFIDENCETHATRSAOFFERSAFTRTWENTYYEARSOFCRYPTANALYTICREVIEWASTANDARDSECURITYREVIEWEVENBYCOMPETENTCRYPTOGRAPHERSCANONLYPROVEINSECURITYITCANNEVERPROVESECURITYBYFOLLOWINGTHEPACKYOUCANLEVERAGETHECRYPTANALYTICEXPERTISEOFTHEWORLDWIDECOMMUNITYNOTJUSTAHANDFULOFHOURSOFACONSULTANTSTIMETHISARTICLEORIGINALLYAPPEAREDININFORMATIONSECURITYMAGAZINE
+\end{breakabletexttt}
+
+The key is SCHNEIE
+\\
+\\
+To find this I first looked at repeating bi and trigams in the text. The bigrams were not particularly useful, but the trigrams were key to figuring out the length of the key. In particular 'GLM' and 'LJH' were trigrams that occurred close to each other and often enough that I could guess guess the period was possibly 7 characters, with 3 being another but less likely possibility. From this point I assumed both 'GLM' and 'LJH' translated to 'THE' in the positions where they were 7 and 21 characters apart. This assumption gave me a key of 'SCLNEI?'. I tested that this was correct by printing out all 26 possible remaining combinations. None of these were fully decrypted but there were several options that looked like they might be correct. Starting with the fist promising one of 'SCLNEIE'. I added spaces where I thought words could be (ex. MADINE THI P SITUATFON AN ENDINEER BRILDS A BOIDGE) and saw that the 3rd letter of the key was potentially incorrect 'SITUATFON' and BRILDS immediately stood out as situation and builds but misspelled. I attempted a decryption with the adjusted key 'SCHNEIE' and got the above text.
+
+
+\section*{Code}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily, language=c,breaklines]
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define DEBUG 1
+
+// ref: https://www3.nd.edu/~busiforc/handouts/cryptography/letterfrequencies.html
+// letters in order of frequency they occure in text
+const char letterFreq[26] = {'E', 'T', 'A', 'I', 'N', 
+                    'O', 'S', 'H', 'R', 'D', 
+                    'L', 'U', 'C', 'M', 'F',
+                    'W', 'Y', 'G', 'P', 'B',
+                    'V', 'K', 'Q', 'J', 'X',
+                    'Z'};
+
+// actual values for above
+const int letterFreqValue[26] = {1200, 9000, 8000, 8000, 8000, 
+                                    8000, 8000, 6400, 6200, 4400,
+                                    4000, 3400, 3000, 3000, 2500,
+                                    2000, 2000, 1700, 1700, 1600,
+                                    1200, 800, 500, 400, 400, 200};
+
+const char letterFreq2[26] = {'E', 'A', 'R', 'I', 'O',
+                                'T', 'N', 'S', 'L', 'C',
+                                'U', 'D', 'P', 'M', 'H',
+                                'G', 'B', 'F', 'Y', 'W',
+                                'K', 'V', 'X', 'Z', 'J',
+                                'Q'};
+
+// fix this
+void replace(char target, char src, char *str, char *out) {
+    for (int i=0; i<strlen(str); i++) {
+        if (str[i] == target) 
+            out[i] = src;
+    }
+}
+
+int main (int argc, char *argv[]) {
+    if (argc < 3) {
+        printf("please select mode and message\n");
+        return 1;
+    }
+
+    if (strcmp(argv[1], "shift") == 0) {
+        printf("\n");
+
+        // just print all shifted combinations
+        for (int i=0; i<25; i++) {
+            for (int j=0; j<strlen(argv[2]); j++) {
+                if (argv[2][j] >= 65 && argv[2][j] <= 90) {
+                    argv[2][j]++;
+                    if (argv[2][j] > 90) 
+                        argv[2][j] = 65;
+                }
+            }
+            printf("%s\n\n", argv[2]);
+        }
+
+    } else if (strcmp(argv[1], "mono-sub") == 0) {
+        // count occurance of each letter in message
+        int freq[26];
+        for (int i=0; i<26; i++) {
+            freq[i] = 0;
+        }
+        for (int i=0; i<strlen(argv[2]); i++) {
+            // convert everything to upper case
+            if (argv[2][i] <= 122 && argv[2][i] >=97) {
+                argv[2][i] -= 32;
+            }
+
+            // count values
+            if (argv[2][i] >= 65 && argv[2][i] <=90) {
+                // only count alphabet chars
+                freq[argv[2][i] - 65]++;
+            }
+        }
+
+        #if DEBUG 
+        for (int i=0; i<26; i++) {
+            printf("%d\n", freq[i]);
+        }
+        #endif
+
+        // sort
+        char alphabet[26] = {'A', 'B', 'C', 'D', 'E',
+                                'F', 'G', 'H', 'I', 'J',
+                                'K', 'L', 'M', 'N', 'O',
+                                'P', 'Q', 'R', 'S', 'T',
+                                'U', 'V', 'W', 'X', 'Y',
+                                'Z'};
+        // bubble sort because lazy
+        int tmpi;
+        char tmpc;
+        for (int i=0; i<25; i++) {
+            for (int j=i+1; j<26; j++) {
+                if (freq[j] > freq[i]) {
+                    tmpi = freq[j];
+                    tmpc = alphabet[j];
+                    freq[j] = freq[i];
+                    alphabet[j] = alphabet[i];
+                    freq[i] = tmpi;
+                    alphabet[i] = tmpc;
+                }
+            }
+        }
+        // print freq of each letter
+        for (int i=0; i<26; i++) {
+            printf("%c %d\n",alphabet[i], freq[i]);
+        }
+
+        // count bigrams
+        int bigrams[26][26];
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                bigrams[i][j] = 0;
+            }
+        }
+
+        int x, y;
+        for (int i=1; i<strlen(argv[2])-1; i++) {
+            x = argv[2][i-1] - 65;
+            y = argv[2][i] - 65;
+            bigrams[x][y]++;
+        }
+
+        #if DEBUG
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                printf("%2i,", bigrams[i][j]);
+            }
+            printf("\n");
+        }
+        #endif
+
+        // sort bigrams
+        char sortedBigrams[26*26][2];
+        int sortedBigramsCount[26*26];
+        int max, xMax, yMax;
+        // another inefficent sort
+        for (int i=0; i<26*26; i++) {
+            max = bigrams[0][0];
+            xMax = 0;
+            yMax = 0;
+            for (int j=0; j<26; j++) {
+                for (int k=0; k<26; k++) {
+                    if (bigrams[j][k]>max) {
+                        max = bigrams[j][k];
+                        xMax = j;
+                        yMax = k;
+                    }
+                }
+            }
+            if (max <= 0) {
+                // NOTE: do not try and print bigram pairs that have a freq of 0
+                for (int j=i; j<26*26; j++) {
+                    sortedBigramsCount[j] = 0;
+                }
+                break;
+            }
+            sortedBigramsCount[i] = max;
+            sortedBigrams[i][0] = (char) (xMax + 65);
+            sortedBigrams[i][1] = (char) (yMax + 65);
+            bigrams[xMax][yMax] = 0;
+        }
+
+        // print bigrams
+        for (int i=0; i<26*26; i++) {
+            if (sortedBigramsCount[i] <= 3) {
+                break;
+            }
+            printf("%c%c %2d\n", sortedBigrams[i][0], sortedBigrams[i][1], sortedBigramsCount[i]);
+        }
+
+        // print estimated message
+        char *out = malloc(sizeof(char) * strlen(argv[2]));
+        strcpy(out, argv[2]);
+        for (int i=0; i<26; i++)  {
+            replace(alphabet[i], letterFreq2[i], argv[2], out);
+        }
+        printf("\n%s\n", out);
+
+        free(out);
+
+
+    } else if (strcmp(argv[1], "vigen") == 0) {
+        // count bigrams
+        int bigrams[26][26];
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                bigrams[i][j] = 0;
+            }
+        }
+
+        int x, y;
+        for (int i=1; i<strlen(argv[2])-1; i++) {
+            x = argv[2][i-1] - 65;
+            y = argv[2][i] - 65;
+            bigrams[x][y]++;
+        }
+
+        #if DEBUG
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                printf("%2i,", bigrams[i][j]);
+            }
+            printf("\n");
+        }
+        #endif
+
+        // sort bigrams
+        char sortedBigrams[26*26][2];
+        int sortedBigramsCount[26*26];
+        int max, xMax, yMax;
+        // another inefficent sort
+        for (int i=0; i<26*26; i++) {
+            max = bigrams[0][0];
+            xMax = 0;
+            yMax = 0;
+            for (int j=0; j<26; j++) {
+                for (int k=0; k<26; k++) {
+                    if (bigrams[j][k]>max) {
+                        max = bigrams[j][k];
+                        xMax = j;
+                        yMax = k;
+                    }
+                }
+            }
+            if (max <= 0) {
+                // NOTE: do not try and print bigram pairs that have a freq of 0
+                for (int j=i; j<26*26; j++) {
+                    sortedBigramsCount[j] = 0;
+                }
+                break;
+            }
+            sortedBigramsCount[i] = max;
+            sortedBigrams[i][0] = (char) (xMax + 65);
+            sortedBigrams[i][1] = (char) (yMax + 65);
+            bigrams[xMax][yMax] = 0;
+        }
+
+        // print bigrams
+        for (int i=0; i<26*26; i++) {
+            if (sortedBigramsCount[i] <= 9) {
+                break;
+            }
+            printf("%c%c %2d\n", sortedBigrams[i][0], sortedBigrams[i][1], sortedBigramsCount[i]);
+        }
+
+
+        // count trigrams
+        int trigrams[26][26][26];
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                for (int k=0; k<26; k++) {
+                    trigrams[i][j][k] = 0;
+                }
+            }
+        }
+
+        //int x, y, z;
+        int z;
+        for (int i=2; i<strlen(argv[2])-1; i++) {
+            x = argv[2][i-2] - 65;
+            y = argv[2][i-1] - 65;
+            z = argv[2][i] - 65;
+            trigrams[x][y][z]++;
+        }
+
+        char sortedTrigrams[26*26*26][3];
+        int sortedTrigramsCount[26*26*26];
+        //int max, xMax, yMax, zMax;
+        int zMax;
+        for (int i=0; i<26*26*26; i++) {
+            xMax = 0;
+            yMax = 0;
+            zMax = 0;
+            max = trigrams[xMax][yMax][zMax];
+            for (int x=0; x<26; x++) {
+                for (int y=0; y<26; y++) {
+                    for (int z=0; z<26; z++) {
+                        if (max < trigrams[x][y][z]) {
+                            xMax = x;
+                            yMax = y;
+                            zMax = z;
+                            max = trigrams[x][y][z];
+                        }
+                    }
+                }
+            }
+            if (max <= 0) {
+                for (int j=i; j<26*26*26; j++) {
+                    sortedBigramsCount[j] = 0;
+                }
+                break;
+            }
+            sortedTrigramsCount[i] = max;
+            sortedTrigrams[i][0] = (char) (xMax + 65);
+            sortedTrigrams[i][1] = (char) (yMax + 65);
+            sortedTrigrams[i][2] = (char) (zMax + 65);
+            trigrams[xMax][yMax][zMax] = 0;
+        }
+
+        // print trigrams
+        for (int i=0; i<26*26; i++) {
+            if (sortedTrigramsCount[i] <= 1) {
+                break;
+            }
+            printf("%c%c%c %2d\n", sortedTrigrams[i][0], sortedTrigrams[i][1], sortedTrigrams[i][2], sortedTrigramsCount[i]);
+        }
+
+        // find distance between each of the most common trigrams
+        int spots[4][7];
+        int dists[4][6];
+        for (int i=0; i<4; i++) {
+            // I only care about the 4 most common trigrams
+            //int spots[7] = {0,0,0,0,0,0,0};
+            //int dists[6] = {0,0,0,0,0,0};
+            int s = 0;
+            // find trigram locations in string
+            for (int j=2; j<strlen(argv[2])-1; j++) {
+                if (argv[2][j-2] == sortedTrigrams[i][0]
+                    && argv[2][j-1] == sortedTrigrams[i][1]
+                    && argv[2][j] == sortedTrigrams[i][2]) {
+                        spots[i][s] = j;
+                        s++;
+                    }
+            }
+            printf("%c%c%c ", sortedTrigrams[i][0], sortedTrigrams[i][1], sortedTrigrams[i][2]);
+            for (int j=0; j<6; j++) {
+                dists[i][j] = spots[i][j+1] - spots[i][j];
+                printf("%4d,", dists[i][j]);
+            }
+            printf("\n");
+        }
+
+        // find common factors
+        int factors[255];
+        for (int i=0; i<254; i++) {
+            factors[i] = 0;
+        }
+        // I know the smallest gap is 50 from prior code
+        int isFactor = 1;
+        int spot = 0;
+        for (int k=1; k<50; k++) {
+            for (int i=0; i<4; i++) {
+                for (int j=0; j<6; j++) {
+                    //printf("\n%d\n", dists[i][j]);
+                    if (dists[i][j] % k != 0) {
+                        //printf("\na\n");
+                        isFactor = 0;
+                        break;
+                    }
+                }
+                if (!isFactor) {
+                    break;
+                }
+            }
+            if (isFactor) {
+                factors[spot] = k;
+                spot++;
+            }
+            isFactor = 1;
+        }
+        for (int i=0; i<255; i++) {
+            if (factors[i] == 0) {
+                break;
+            }
+            printf("%3d,", factors[i]);
+        }
+        printf("\n");
+
+
+        //char* key = "SCKNEI_";
+        char* key = "SCHNEIE";
+        int whichChar = 0;
+        int offset;
+        char tmp;
+        for (int i=0; i<26; i++) {
+            printf("\n\n");
+            printf("offset: %c\n\n", (char) (i+65));
+            for (int j=0; j<strlen(argv[2])-1; j++) {
+                offset = (int) key[whichChar];
+                if (whichChar == 6) {
+                    //offset = i + 65;
+                }
+                offset -= 65;
+                tmp = argv[2][j];
+                tmp -= 65;
+                tmp = (tmp - offset) % 26;
+                if (tmp < 0) {
+                    tmp += 26;
+                }
+                tmp += 65;
+                printf("%c", tmp);
+                whichChar = (whichChar+1) % 7;
+            }
+            whichChar = 0;
+        }
+    } else {
+        printf("valid decrypt options are:\n shift\n mono-sub\n vigen\n");
+        return 1;
+    }
+    return -1;
+}
+\end{lstlisting}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput
+'.

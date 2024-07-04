@@ -1,0 +1,6 @@
+[submodule "rock-paper-scissors-game"]
+	path = rock-paper-scissors-game
+	url = git@gitlab.encs.vancouver.wsu.edu:cs447-project2/rock-paper-scissors-game.git
+[submodule "project"]
+	path = project
+	url = git@gitlab.encs.vancouver.wsu.edu:cs447-project2/rock-paper-scissors-game.git

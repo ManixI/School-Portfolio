@@ -1,0 +1,121 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{array}
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+{}
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Preparation 13} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+
+\begin{enumerate}
+  \item It is a group that is closed under addition and multiplication.
+  \item It must have unity, be commutative, and every non zero must be a unit.
+  \item Addition: \\
+    \begin{tabular}{c | ccccccccc}
+      +    & 0 & 1 & 2 & i & 1+i & 2+i & 2i & 1+2i & 2+2i \\
+      \hline
+      0    & 0    & 1    & 2    & i    & 1+i  & 2+1  & 2i   & 1+2i & 2+2i \\
+      1    & 1    & 2    & 0    & 1+i  & 2+i  & i    & 1+2i & 2+2i & 2i \\
+      2    & 2    & 0    & 1    & 2+i  & i    & 1+i  & 2+2i & 2i   & 1+2i \\
+      i    & i    & 1+i  & 2+i  & 0    & 2i   & 1+2i & 2    & 1    & 2 \\
+      1+i  & 1+i  & 2+i  & i    & 2i   & 2    & 1    & 1+2i & 2+2i & 0 \\
+      2+1  & 2+i  & i    & 1+i  & 1+2i & 0    & 2i   & 2    & 1    & 2i \\
+      2i   & 2i   & 1+2i & 2+2i & 2    & 1+2i & i    & 0    & 2+i  & 1+i \\
+      1+2i & 1+2i & 2+2i & 2i   & 1    & 2+2i & 2+i  & 1+i  & 0    & 2 \\
+      2+2i & 2+2i & 2i   & 1+2i & 2    & 0    & 1+i  & 2+i  & 1    & i \\
+    \end{tabular}\\ \\
+    Multiplication:\\
+    \begin{tabular}{c | ccccccccc}
+      + & 0 & 1 & 2 & i & 1+i & 2+i & 2i & 1+2i & 2+2i \\
+      \hline
+      0    & 0    & 0    & 0    & 0    & 0    & 0    & 0    & 0    & 0 \\
+      1    & 0    & 1    & 2    & i    & 1+i  & 2+1  & 2i   & 1+2i & 2+2i \\
+      2    & 0    & 2    & 1    & 2i   & 2+2i & 1+2i & i    & 2+i  & 1+i \\
+      i    & 0    & i    & 2i   & 2+2i & 1+2i & 2+i  & 1+i  & 2    & 1 \\
+      1+i  & 0    & 1+i  & 2+2i & 1+2i & 2    & 1    & 1i   & 2i   & 1 \\
+      2+1  & 0    & 2+i  & 1+2i & 2+i  & 1    & 2    & 1+i  & i    & 2 \\
+      2i   & 0    & 2i   & i    & 1+i  & 1i   & 1+i  & 2    & 1+i  & 2+i \\
+      1+2i & 0    & 1+2i & 2+i  & 2    & 2i   & i    & 1+i  & 2+2i & 1 \\
+      2+2i & 0    & 2+2i & 1+i  & 1    & 1    & 2    & 2+i  & 1    & 2 \\
+    \end{tabular}\\
+    The units are: 1, 2, 1+i, 2+i, 2i, 1+2i, 2+2i
+\end{enumerate}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

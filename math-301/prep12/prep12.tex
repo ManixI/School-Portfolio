@@ -1,0 +1,111 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{array}
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+{}
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Preparation 12} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+
+\begin{enumerate}
+  \item The law of composition must be associative, there must be an identity element, each element has an inverse element, each element must be unique, and it must be a set with a composition law
+  \item $\mathbb{Z}_4$: \\
+    \setlength\extrarowheight{3pt}
+    \begin{tabular}{c | c c c c c}
+      X & 0 & 1 & 2 & 3  \\
+      \hline
+      0 & 0 & 0 & 0 & 0 \\
+      1 & 0 & 1 & 2 & 3 \\
+      2 & 0 & 2 & 0 & 2 \\
+      3 & 0 & 3 & 2 & 1 \\
+    \end{tabular}\\
+    $\mathbb{Z}_3$: \\
+    \setlength\extrarowheight{3pt}
+    \begin{tabular}{c | c c c c c}
+      X & 0 & 1 & 2  \\
+      \hline
+      0 & 0 & 0 & 0 \\
+      1 & 0 & 1 & 2 \\
+      2 & 0 & 2 & 1 \\
+    \end{tabular}\\
+  \item $\mathbb{Z}_4$ and $\mathbb{Z}_3$ are groups, the values in the Cayley tables are not. This is because the values in the Cayley tables are not all unique.
+\end{enumerate}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

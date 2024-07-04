@@ -1,0 +1,172 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 1} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{2.1}
+\subsection*{1}
+This is a statement, it is false
+
+\subsection*{5}
+This is a statement, it is true
+
+\clearpage
+\section*{2.2}
+\subsection*{1}
+P: 8 is even \\
+Q: * is a power of 2 \\
+\\
+$P \land Q$
+
+\subsection*{3}
+P: X == Y \\
+\\
+$\neg P$
+
+\subsection*{9}
+$x \in A$ \\
+$x \in B$ \\
+\\
+$x \in A \land x \not\in B$
+
+\clearpage
+\section*{2.3}
+\subsection*{2}
+If a function is differentiable then it is is continuous
+
+\subsection*{3}
+Only if a function is integrable then is it continuous
+
+\subsection*{11}
+If you stop writing you fail.
+
+
+\clearpage
+\section*{2.4}
+\subsection*{2}
+If and only if a function is linear then dose it have a constant derivative.
+
+
+\clearpage
+\section*{2.5}
+\subsection*{1}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+P & Q & R & $Q \Rightarrow R$ & $P \lor (Q \Rightarrow R)$ \\ 
+\hline
+T & T & T & T & T \\
+\hline
+T & T & F & F & T \\
+\hline
+T & F & T & T & T \\
+\hline
+T & F & F & T & T \\
+\hline
+F & T & T & T & T \\
+\hline
+F & T & F & F & F \\
+\hline
+F & F & T & T & T \\
+\hline
+F & F & F & T & T \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{4}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+P & Q & $P \lor Q$ & $\neg P$ & $\neg (P \lor Q) \lor (\neg P)$ \\ 
+\hline
+T & T & T & F & F \\
+\hline
+T & F & T & F & F \\
+\hline
+F & T & T & T & T \\
+\hline
+F & F & F & T & T \\
+\hline
+\end{tabular}
+\end{center}
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

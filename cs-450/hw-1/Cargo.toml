@@ -1,0 +1,21 @@
+[package]
+name = "hw-1"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.release]
+#codegen-units = 1
+#lto = true
+#panic = "abort"
+
+[dependencies]
+criterion = {version = "0.3", features = ["html_reports"]}
+
+[dev-dependencies]
+criterion = {version = "0.3", features = ["html_reports"]}
+
+[[bench]]
+name = "my_benchmark"
+harness = false

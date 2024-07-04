@@ -1,0 +1,160 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 5} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+
+\begin{itemize}
+  \item[Ch 5.] \begin{itemize} % Prove by contropositive
+      \item[1.] Proposition: Suppose $n\in\mathbb{Z}$. If $n^2$ is even, then $n$ is even.\\
+                Suppose $n^2$ is odd\\
+                Then $n^2=2x+1$ by the definition of an odd number\\
+                And if $n^2$ is odd, then $n$ must be odd by theorem 6\\
+                So if $n^2$ not being even implies $n$ is not even\\
+                Then if $n$ is even $n^2 must be even$
+
+      \item[4.] Proposition: Suppose $a,b,c\in\mathbb{Z}$. If $a$ dose not divide $bc$, then a dose not divide $b$\\
+                Suppose $a$ divides $b$\\
+                Then a divides any $nb$ where $n\in\mathbb{Z}$ by definition 3\\
+                Thus if $a$ divides $b$ then $a$ divides $bc$\\
+                Thus if $a$ dose not divide $bc$, then a dose not divide $b$
+
+      \item[7.] Proposition: Suppose $a,b\in\mathbb{Z}$. If both $ab$ and $a+b$ are even, then $a$ and $b$ are even\\
+                Suppose $a$ and $b$ are not both even\\
+                Case 1: Suppose $a$ is odd and $b$ is even without loss of generality \\
+                Then $ab=2c(2d+1)=4dc+2c=2(2dc+c)$ which is even\\
+                And $a+b=2c+2d+1=2(c+d)+1$ which is odd\\
+                Thus $ab$ and $a+b$ are not both even\\
+                Case 2: Suppose $a$ and $b$ are odd\\
+                Then $ab=(2c+1)(2d+1)=4dc+2c+2d+1=2(2cd+c+d)+1$ which is odd\\
+                And $a+b=(2c+1)+(2d+1)=2c+2d+2=2(d+c+1)$ which is even\\
+                Thus $ab$ and $a+b$ are not both even\\
+                Thus in all cases $ab$ and $a+b$ are not both even\\
+
+
+    \end{itemize}
+  \item[Ch 6.] \begin{itemize} % Prove by contridiction
+      \item[5.] Prove that $\sqrt{3}$ is irrational\\
+                Suppose $\sqrt{3}$ is rational\\
+                Then $\sqrt{3}=\frac{m}{n}$ where $m,n\in\mathbb{Z}$ and $n\neq 0$
+                Then we can assume $\frac{m}{n}$ is fully reduced thus we know both $m$ and $n$ are not both even as if they were both even it could be further reduced by factoring out 2\\
+                So $3n^2=m^2$\\
+                And if $m^2$ is even, then $m$ is even (5-1 above)\\
+                So given $x\in\mathbb{Z}$, $3n^2=(2x)^2=4x^2$\\
+                So $6n^2=8x^2$\\
+                So $2(3n^2)=2(4x^2)$\\
+                Thus both sides are even\\
+                And because an even multiplied by an even is even, $n^2$ and thus $n$ is even\\
+                But both $n$ and $m$ cannot be even, thus $\sqrt{3}$ cannot be rational\\
+                Thus $\sqrt{3}$ is irrational\\
+
+      \item[7.] If $a,b\in\mathbb{Z}$, then $a^2-4b-2 \neq 0$\\
+                Suppose there exists $a,b\in\mathbb{Z}$ where $a^2-4b-2=0$\\
+                Then $a^2=2b+2=2(b+1)$\\
+                So $a^2$ is even\\
+                Thus it follows that $a$ is even, ie. $a=2c$ for $c\in\mathbb{Z}$ (5-2 above)\\
+                So $(2c)^2-4b-2=0$\\
+                So $2c^2-2b-1=0$\\
+                So $2(c^2-b)-1=0$\\
+                So $2(c^2-b)+1=2$\\
+                But because $c^2-b\in\mathbb{Z}$ by fact 4.1, $2(c^2-b)+1=2d+1$ which is the definition of an odd number\\
+                But 2 is even, so there cannot exist $a,b\in\mathbb{Z}$ where $a^2-4b-2=0$\\
+                Thus If $a,b\in\mathbb{Z}$, then $a^2-4b-2 \neq 0$
+
+      \item[10.] There exists no integers $a$ and $b$ for which $21a+30b=1$\\
+                Suppose there exists integers $a$ and $b$ for which $21a+30b=1$\\
+
+
+      \item[11.] There exists no integers $a$ and $b$ for which $18a+6b=1$\\
+                Suppose there exists integers $a$ and $b$ for which $18a+6b=1$\\
+                Then $2(9a+3b)=1$, or $2c=1$\\
+                Thus 1 must be even\\
+                But because 1 is not even\\
+                There exists no integers $a$ and $b$ for which $18a+6b=1$
+
+    \end{itemize}
+\end{itemize}
+
+Hammack, R. H. (2009). Book of Proof. https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

@@ -1,0 +1,133 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 10} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{11.1}
+\begin{itemize}
+  \item[1.] $\{(2,1),(3,2),(3,1),(4,3),(4,2),(4,1),(5,4),(5,3),(5,2),(5,1)\}$\\
+          \includegraphics[scale=0.1]{images/2.jpg}
+  \item[2.] $\{(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(2,2),(2,4),(2,6),(3,3),(3,6),(4,4),(5,5),(6,6)\}$\\
+          \includegraphics[scale=0.1]{images/1.jpg}
+\end{itemize}
+
+\section*{11.2}
+\begin{itemize}
+  \item[1.] It is reflexive transitive, and symmetric.
+  \item[5.] it is not reflexive as it is missing most of the points in $\mathbb{R}$. It is symmetric and transitive.
+\end{itemize}
+
+\section*{11.3}
+\begin{itemize}
+  \item[8.] The set is reflexive because if $x\in\mathbb{Z}$, then $x^2+x^2$ is even, thus $xRx$, so R is reflexive.\\
+             The set is symmetric because for all $x,y\in\mathbb{Z}$, $x^2+y^2=y^2+x^2$ because of the properties of addition.\\
+             Now assume $xRy$ and $yRz$\\
+             Because the set R is even, then it follows that the above are both even\\
+             Thus $x^2+y^2=2a$ and $y^2+x^2=2b$\\
+             Adding them together we get $(x^2+y^2)+(y^2+z^2)=2a+2b=2(a+b)=2c$, which is even\\
+             Thus R is an equivalence relation.\\
+             The equivalence classes are [0] where $x,y$ are both even and [1] where $x,y$ are both odd.
+  \item[11.] The set $\{x\in\mathbb{N}:x\mod 2\}$ has two equivalence classes $\{[0],[1]\}$, but is infinite as it is onto the infinite set $\mathbb{N}$, thus the statement is false.
+  \item[12.] This is false. Let set $X=\{1,2,3\}$, the set $R=\{(1,1)(2,2)(3,3),(1,2),(2,1)\}$, and the set $S=\{(1,1),(2,2),(3,3),(2,3),(3,2)\}$\\
+              R and S are both equivalence relations on the set X\\
+              then $R\cap S=\{(1,1),(2,2),(3,3),(1,2),(2,1),(3,2),(2,3)\}$\\
+              $R\cap S$ is not an equivalence relation as it is not transitive, it is missing the elements $\{(1,3),(3,1)\}$\\
+              Therefor $R\cap S$ is not an equivalence relation on a set X just because sets R and S are.
+\end{itemize}
+
+\section*{11.4}
+\begin{itemize}
+  \item[3.] $\{[0],[1],[2],[3]\}$
+\end{itemize}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

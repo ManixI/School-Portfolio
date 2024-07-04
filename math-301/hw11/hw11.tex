@@ -1,0 +1,160 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 11} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{12.1}
+\begin{itemize}
+  \item[6.] The domain and codoname are both $\mathbb{Z}$, the range is $\{4x+6:x\in\mathbb{Z}\}$. $f(10)=45$.
+  \item[9.] No, a function must be one-to-one, but the value 4 in the domain could correspond to either 2 or -2 in the range
+\end{itemize}
+
+\section*{12.2}
+\begin{itemize}
+  \item[4.] The function is injective, but not surjective. This is becuase $2n$ will always be even by definition, so the range is missing all even values.\\
+            It is injective because if we assume $f(n)=f(m)$ we get $(2n,n+3)=(2m,m+3)$ which can be reduced down to $(n,n=m,m)$.
+  \item[5.] The funcion is injective because if we assume $f(n)=f(m)$ we get $2n+1=2m+1$ which reduced down to $n=m$.\\
+            The function is not surjective because $f(n)$ will always be odd by definfition, and thus there are values in $\mathbb{Z}$ that are not in the range.
+  \item[6.] This is not injective because the values (1,2) and (5,5) both return the value -5.\\
+            This is surjective because $3n-4m=x$ can represent any value x for $x\in\mathbb{Z}$. This is the case as for any time $n=m$, the function $3n-4n=-n$, so as long as $n\in\mathbb{Z}$, $x\in\mathbb{Z}$.
+\end{itemize}
+
+\section*{12.3}
+\begin{itemize}
+  \item[4.] Take a square with sides of length 1\\
+            The furthest apart any 4 points inside the square can be is 1, because that places each point at a corner of the square\\
+            Then add in a 5th point
+            The diagonal of this square is $l^2=1^2+1^2=2$\\
+            Then $l=\sqrt{2}$\\
+            If you place the 5th point the furthest away from any of the earlier 4 points it can possibly be, it ends up in the center where it is equidistant for all 4 points.\\
+            This being the center of the diagonal, it is $\frac{\sqrt{2}}{2}$ from all 4 corners.\\
+            Thus of 5 points all placed in a square with sides of length one, at least two will be $\frac{\sqrt{2}}{2}$ or closer to each other.
+  \item[5.] Let A be a set of 7 integers and $B=\{\{0\},\{1,9\},\{2,8\},\{3,7\},\{4,6\},\{5\}\}$ where all the two element sets sum to 10.\\
+            Then let $f:A\rightarrow B=x \mod 10$\\
+            Because |A| > |B| f is not injunctive by the piginhole principle.\\
+            Then there are two cases for any two integers x and y.
+            If $x \mod 10=y\mod 10$ then $x-y$ is divisible by 10.\\
+            If $x\mod 10\neq y\mod 10$ then it follows that $f(x)=f(y)=\{a,b\}$ is one of the two element sets of B.\\
+            In this case we can say $x=10i+r$ and $y=10j+s$ where $i,j\in\mathbb{Z}$ and $r+s=10$.\\
+            Thus $x+y=10i+10j+10=10(r+j)$ which is divisible by 10.
+\end{itemize}
+
+\section*{12.4}
+\begin{itemize}
+  \item[4.] $g\circ f=\{(a,a),(b,b),(c,a)\}$\\
+            $f\circ g=\{(a,c),(b,c),(c,c)\}$
+  \item[5.] $g\circ f=\sqrt[3]{x^3+1}$\\
+            $f\circ g=x+1$
+\end{itemize}
+
+\section*{12.5}
+\begin{itemize}
+  \item[3.] It is injective because $2^n=2^m$ can be simplified to $m=n$.\\
+            It is surjective\\
+            Suppose $b\in B$\\
+            Then by definition $b=2^n$ for some $n\in\mathbb{Z}$\\
+            Thus $(n)=2^n=b$\\
+            $f^{-1}(x)=\log_2(x)$
+  \item[5.] $f^{-1}(x)=\frac{x+e}{\pi}$
+\end{itemize}
+
+\section*{12.6}
+\begin{itemize}
+  \item[2.] $f(\{1,2,3\})=\{3,8\}$\\
+            $f(\{4,5,6,7\})=\{1,2,4,6\}$\\
+            $f(\emptyset)=\emptyset$\\
+            $f^{-1}(\{0,5,9\})=\emptyset$\\
+            $f^{-1}(\{0,3,5,9\})=\{3\}$
+\end{itemize}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

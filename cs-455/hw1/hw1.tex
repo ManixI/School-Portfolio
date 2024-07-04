@@ -1,0 +1,111 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 1} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{1}
+\begin{enumerate}
+  \item MDNS, UDP, DNS, TCP, TSLV1.3, QUIC IGMPv3 \\
+        \includegraphics[scale=0.2]{images/1.png}
+  \item HTTP \\
+        \includegraphics[scale=0.2]{images/2.png}
+  \item IPv4\\
+        \includegraphics[scale=0.3]{images/3.png}
+  \item It was sent from port 59286 to port 80 \\
+        \includegraphics[scale=0.3]{images/4-1.png} \\
+        The data was returned to port 59286 from port 80 \\
+        \includegraphics[scale=0.3]{images/4.2.png}
+  \item The first get took approximately 0.06s to resolve, from the first get to the last return packet took 0.32s\\
+        \includegraphics[scale=0.4]{images/5.png}
+  \item The target address for http://http.badssl.com/ was 104.154.89.105. My (home network) ip address was 192.168.50.5\\
+        \includegraphics[scale=0.4]{images/6.png}
+  \clearpage
+  \item Yes, I received a icon-red.png and favicon-red.ico (assuming an icon counts as an image)\\
+        \includegraphics[scale=0.4]{images/7.png}
+
+
+\end{enumerate}
+
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput
+'.

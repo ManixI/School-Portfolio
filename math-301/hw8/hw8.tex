@@ -1,0 +1,156 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 7} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{Chapter 8}
+\begin{itemize}
+  \item[1.] Prove that $\{12n:n\in\mathbb{Z}\}\subseteq\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$\\
+            Suppose $a\in\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$\\
+            This means $a\in\{3n:3\in\mathbb{Z}\}$ and $a\in\{2n:3\in\mathbb{Z}\}$ by definition of intersection\\
+            This means $2|a$ and $a|3$, so $a=2c$ and $a=3d$ for $c,d\in\mathbb{Z}$\\
+            Because $a=2c$, a is even as this is the definition of an even number\\
+            Thus $d$ is even, or $d=2e$ for $e\in\mathbb{Z}$\\
+            So $a=3(2e)=6e$, because a is still even $e=2f$ or $a=12f$\\
+            Thus $12|a$ ie. $\{12n:n\in\mathbb{Z}\}$\\
+            \hspace*{5mm} Because $a\in\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$ implies $12|a$, $\{12n:n\in\mathbb{Z}\}$, it must be true that $\{12n:n\in\mathbb{Z}\}\subseteq\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$
+
+
+  \item[2.] Prove that $\{6n:n\in\mathbb{Z}\}=\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$\\
+            Suppose $a\{6n:n\in\mathbb{Z}\}$\\
+            This means $6|a$ or $a=6c$ for $a\in\mathbb{Z}$\\
+            Therefor $a=2(3c)$ so it follows that $3|a$ and $2|a$\\
+            So $a\in\{3n:3\in\mathbb{Z}\}$ and $a\in\{2n:3\in\mathbb{Z}\}$\\
+            Therefor $a\in\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$\\
+            This shows $\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}\subseteq \{12n:n\in\mathbb{Z}\}$\\
+            Now suppose $a\in\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$\\
+            This means $a\in\{3n:3\in\mathbb{Z}\}$ and $a\in\{2n:3\in\mathbb{Z}\}$ by definition of intersection\\
+            This means $2|a$ and $a|3$, so $a=2c$ and $a=3d$ for $c,d\in\mathbb{Z}$\\
+            Thus a has both 2 and 3 as prime factors, therefor the prime factorization of a must include 2 and 3\\
+            Hence $2*3=6$ divides a, ie. $a\{6n:n\in\mathbb{Z}\}$\\
+            Therefor $\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}\subseteq a\{6n:n\in\mathbb{Z}\}$\\
+            \hspace*{5mm}Because $\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}\subseteq \{12n:n\in\mathbb{Z}\}$ and $\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}\subseteq a\{6n:n\in\mathbb{Z}\}$, $\{6n:n\in\mathbb{Z}\}=\{2n:n\in\mathbb{Z}\}\cap\{3n:3\in\mathbb{Z}\}$
+
+
+
+  \item[3.] If $k\in\mathbb{Z}$, then $\{x\in\mathbb{Z}:n|k\}\subseteq\{n\in\mathbb{Z}:n|k^2\}$\\
+            Let $n\in\{n\in\mathbb{Z}:n|k^2\}$\\
+            Then $n=k^2=k(k)$\\
+            Thus if $n|kk$, $n|k$\\
+            Therefor $n\in\{x\in\mathbb{Z}:n|k\}$\\
+            Because $n\in\{n\in\mathbb{Z}:n|k^2\}\Rightarrow n\in\{x\in\mathbb{Z}:n|k\}$, $\{x\in\mathbb{Z}:n|k\}\subseteq\{n\in\mathbb{Z}:n|k^2\}$
+
+  \item[6.] Suppose A, B, and C are sets. Prove that if $A\subseteq B$, then $A-C\subseteq B-C$\\
+            Suppose A, B, and C are sets and $A\subseteq B$\\
+            Then if we can subtract C from both sides to get $A-C\subseteq B-C$\\
+            \hspace*{5mm} This works because by removing the same elements of C from both sets A and B, you can never reach a point where B dose not contain every element of A.
+
+
+  \item[8.] If A, B, and C are sets, then $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$\\
+            Suppose $A\cup(B\cap C)$\\
+            This means $\{x:(x\in A)\lor((x\in B)\land(x\in C))\}$\\
+            Then $\{x:((x\in A)\land(x\in B))\lor((x\in A)\land(x\in C))$ by the Distributive law\\
+            So $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$
+
+
+  \item[20.] Prove that $\{9^n:n\in\mathbb{Q}\}=\{3^n:n\in\mathbb{Q}\}$\\
+            Suppose $x\in \{9^n:n\in\mathbb{Q}\}$\\
+            Then $9^n$ can be written as $3^{n+1}$\\
+            And $\mathbb{Q}$ is closed under addition by theorem 1\\
+            Therefor $\{a:a\in\mathbb{Q}\}=\{a+1:a\in\mathbb{Q}\}$\\
+            Thus $\{3^n:n\in\mathbb{Q}\}=\{3^{n+1}:n\in\mathbb{Q}\}=\{9^n:n\in\mathbb{Q}\}$
+
+
+\end{itemize}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

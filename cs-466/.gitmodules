@@ -1,0 +1,9 @@
+[submodule "cs466_s23"]
+	path = cs466_s23
+	url = https://github.com/milhead2/cs466_s23
+[submodule "pico/pico-examples"]
+	path = pico/pico-examples
+	url = https://github.com/raspberrypi/pico-examples.git
+[submodule "pico/pico-sdk"]
+	path = pico/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git

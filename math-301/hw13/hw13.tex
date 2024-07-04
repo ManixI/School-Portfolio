@@ -1,0 +1,160 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+\usepackage{array}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 13} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\begin{enumerate}
+  \item Addition for $\mathbb{Z}_5$:\\
+    \begin{tabular}{c|ccccc}
+      + & 0 & 1 & 2 & 3 & 4 \\
+      \hline
+      0 & 0 & 1 & 2 & 3 & 4 \\
+      1 & 1 & 2 & 3 & 4 & 0 \\
+      2 & 2 & 3 & 4 & 0 & 1 \\
+      3 & 3 & 4 & 5 & 0 & 1 \\
+      4 & 4 & 0 & 1 & 2 & 3 \\
+    \end{tabular}\\\\
+    Multiplication for $\mathbb{Z}_5$:\\
+    \begin{tabular}{c|ccccc}
+      X & 0 & 1 & 2 & 3 & 4 \\
+      \hline
+      0 & 0 & 0 & 0 & 0 & 0 \\
+      1 & 0 & 1 & 2 & 3 & 4 \\
+      2 & 0 & 2 & 4 & 1 & 3 \\
+      3 & 0 & 3 & 1 & 4 & 2 \\
+      4 & 0 & 4 & 3 & 2 & 1 \\
+    \end{tabular}
+  \item $\mathbb{Z}_5$ is a field because it satisfies all the conditions of a field.\\
+      It is closed under addition and subtraction because $\mathbb{Z}_5\subset\mathbb{Z}$ and $\mathbb{Z}$ is closed under addition and multiplication.\\
+      It has an element 0 where for all $a\in\mathbb{Z}_5$, $a+0=a$ as shown in the above addition table.\\
+      It has identity because there exists the identity element 1 where for all $a\in\mathbb{Z}_5$, $1a=a$.\\
+      Every element of $\mathbb{Z}_5$ is a unit (that is $\forall a, \exists a^{-1}: a,a^{-1}\in\mathbb{Z}_5, a\neq0, aa^{-1}=1$) as shown in the above multiplication table.
+      \clearpage
+  \item Addition for $\mathbb{Z}_4$:\\
+    \begin{tabular}{c|cccc}
+      + & 0 & 1 & 2 & 3 \\
+      \hline
+      0 & 0 & 1 & 2 & 3 \\
+      1 & 1 & 2 & 3 & 0 \\
+      2 & 2 & 3 & 0 & 1 \\
+      3 & 0 & 0 & 1 & 2 \\
+    \end{tabular}\\\\
+    Multiplication for $\mathbb{Z}_4$:\\
+    \begin{tabular}{c|cccc}
+      X & 0 & 1 & 2 & 3 \\
+      \hline
+      0 & 0 & 0 & 0 & 0 \\
+      1 & 0 & 1 & 2 & 3 \\
+      2 & 0 & 2 & 0 & 2 \\
+      3 & 0 & 3 & 2 & 1 \\
+    \end{tabular}
+  \item $\mathbb{Z}_4$ is not a field because not every value is a unit. The identity value is 1, and there is no value $a\in\mathbb{Z}_4$ such that $2a=1$.
+  \item 2-dimensional vectors whose elements are those of $\mathbb{Z}_5$ form a vector space over $\mathbb{Z}_5$ because it satisfies the following axioms.\\
+      Vector addition using these elements is closed because addition is closed in $\mathbb{Z}_5$.\\
+      It is commutative because $\mathbb{Z}_5$ is commutative.\\
+      It is associative because $\mathbb{Z}_5$ is associative.\\
+      It is closed under multiplication because $\mathbb{Z}_5$ is.\\
+      Every element is a unit because this is also true of $\mathbb{Z}_5$.\\
+      Scalar and field multiplication are compatible because multiplication is associative in $\mathbb{Z}_5$.\\
+      There exists an additive inverse for every element because this is also true in $\mathbb{Z}_5$.\\
+      There is an identity element 1 because there is one in $\mathbb{Z}_5$.\\
+      Scalar multiplication with vector addition and field addition are distributive because both multiplication and addition are distributive in $\mathbb{Z}_5$.
+\end{enumerate}
+
+
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+\subsection*{Reference:}
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+\\
+\\
+JUDSON, T. (2023). Abstract algebra: Theory and applications. ORTHOGONAL PUBLISHING L3C.
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

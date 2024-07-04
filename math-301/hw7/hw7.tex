@@ -1,0 +1,147 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 7} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{Chapter 9}
+\begin{itemize}
+  \item[1.] If $x,y\in\mathbb{R}$ then $|x+y|=|x|+|y|$\\ %false
+            Let $x=1$ and $y=-1$\\
+            Then $|x+y|=|1+-1|=0$, and $|x|+|y|=|1|+|-1|=1+1=2$\\
+            So if $x,y\in\mathbb{R}$ then $|x+y|=|x|+|y|$ is not true in all cases.
+
+  \item[2.] For every natural number $n$, the integer $2n^2-4n+31$ is prime\\ %false
+            Let $n=31$\\
+            Then $2(31)^2-4(31)+31=2(31)^2-3(31)=1830$\\
+            And because $31|2(32)^2-3(32)$ ie $31|1830$\\
+            The integer $2n^2-4n+31$ is not prime in all cases where $n\in\mathbb{N}$\\
+
+  \item[3.] If $n\in\mathbb{Z}$ and $n^5-n$ is even, then $n$ is even\\ %false
+            Suppose $n=3$\\
+            Then $3^5-3=240$, which is even\\
+            Thus $n^5-n$ being even dose not imply that $n$ is even
+
+  \item[4.] For every natural number $n$, the integer $n^2+17n+17$ is prime\\ %false
+            Let $n=17$\\
+            Then $n^2+17n+17=17^2+17(17)+17=17(17+17+1)$\\
+            Because 17 is a common factor, $17|17^2+17(17)+17$\\
+            Thus the integer $n^2+17n+17$ is not prime for every $n\in\mathbb{N}$
+
+  \item[15.] Every odd integer is the sum of three odd integers\\ %true
+            Let $a$ be an odd integer\\
+            Then $a=2w+1$ by definition of an odd number\\
+            And $w$ can be broken up into $x+y+z+1$ where $x,y,z\in\mathbb{Z}$\\
+            So $a=2(x+y+z+1)+1=2x+2y+2z+3=(2x+1)+(2y+1)+(2x+1)=b+c+d$ where $a,b,c\in\mathbb{Z}$ and are all odd\\
+            Therefor every odd integer can be written as the sum of 3 odd integers.
+
+  \item[16.] If $A$ and $B$ are finite sets, then $|A\cup B|=|A|+|B|$\\ %true
+            Let $A$ and $B$ be finite sets\\
+            $A\cup B=\{x:(x\in A)\lor(x\in B)\}$\\
+            And $A+B=\{x:(x\in A)\lor(x\in B)\}$\\
+            Therefor if $A$ and $B$ are finite sets, then $|A\cup B|=|A|+|B|$
+
+
+  \item[17.] For all set $A$ and $B$, if $A-B=\emptyset$, then $B\neq\emptyset$\\ %false
+            Let $B=\emptyset$ and $A=\emptyset$\\
+            $\emptyset - \emptyset = \emptyset$\\
+            Therefore there is a case where both $A-B=\emptyset$ and $B=\emptyset$
+
+  \item[25.] For all $a,b,c\in\mathbb{Z}$, if $a|bc$, then $a|b$ or $a|c$\\ %true
+            Let $a,b,c\in\mathbb{Z}$ and $a|bc$\\
+            A number $a$ divides a number $d$ if $d=ak$ for some $k\in\mathbb{Z}$ by definition\\
+            Thus $ak=bc$ if $a|bc$\\
+            And because we know we can divide out $a$ to get $k=e$ where $e\in\mathbb{Z}$ due to $a|bc$\\
+            Then either $a|b$ or $a|c$
+\end{itemize}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

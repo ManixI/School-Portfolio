@@ -1,0 +1,699 @@
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{titlesec}
+\usepackage{courier}
+
+
+\graphicspath{ {./images/} }
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+
+\begin{document}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=c}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+\title{Lab 1}
+\author{
+  \bold Ian Manix \\\
+  }
+
+
+\begin{center}
+   \textbf{SPI Communications part 1}
+
+   \vspace{.75in}
+
+   by
+
+   \textbf{Ian Manix}
+
+   \vspace{2in}
+
+   CS 466
+
+   LABRATORY REPORT
+
+   \vspace{.75in}
+
+   Computer Science, Washington State University
+
+   March 10, 2023
+
+\end{center}
+
+\clearpage
+\section*{Objectives}
+
+\begin{enumerate}
+    \item Gain understanding of SPI protocol and how it is used with a simple peripheral device.
+    \item Use a standard protocol to control GPIO endpoints on an IO expander.
+    \item Implement and debug a bit-banged serial communications protocol.
+\end{enumerate}
+
+
+%\clearpage
+\section*{Apparatus}
+
+For this lab we used:
+\begin{enumerate}
+  \item 1 raspberry Pi pico 
+  \item 1 breadboard
+  \item 1 MCP23S17 GPIO expander
+  \item 2 push button switches
+  \item various jumper cables
+  \item 1 LED
+  \item a logic analyzer/oscilloscope
+\end{enumerate}
+
+\includegraphics[scale=0.08]{images/setup.jpg} \\
+\includegraphics[scale=0.08]{images/analyzer-setup.jpg}
+
+Along with the button necessary for the input, an additional button was tied to the reset pin of the pi and expander so make resetting and re-uploading code easier.
+
+
+\section*{Method}
+
+For this lab I setup a pi to communicate with a GPIO expander via SPI, for the purposes of controlling the output of a specific pin and using a second pin to receive interrupts from a button. Communication was done via 3 8 bit commands at a time, with reading and writing handled by the same function. The first command was always a 0x40 (write) or 0x41 (read) command. The second command is the address of the register that is to be accessed, and the 3rd command is always 0x00 in the case of a read, and in the case of a write is the data to be written to the addressed register. In the code the code these are sent by passing an 8-bit number to the transfer function, and then every clock cycle sending a bit, reading a bit, then bit-shifting adding the bit read to the accumulator, then bit-shifting the accumulator and input int left once. \\
+To set up the expander, multiple commands are sent before the task scheduler is started (it should be noted that the expander is kept in the default state where the A and B registers are interlaced): 
+
+\begin{enumerate}
+    \item The IODIRA (0x00) is sent 0x00, defining all the bank A pins as outputs. 
+    \item IPOLA (0x02) is sent 0x00 to ensure the polarity of the pins is correct.
+    \item GUPPUA (0x0c) and GUPPUA (0x0d) are sent 0xff to enable the pull up resistors on all pins
+    \item IODIRB (0x0b) is sent 0x04 to set pin B2 as an input
+    \item GPINTENB (0x04) is sent 0x04 to set pin B2 to raise an interrupt
+    \item DEFVALB (0x06) and INTCONB (0x0b) are sent 0x04 to configure B2 to raise an interrupt when pulled low
+\end{enumerate}
+
+
+To change the state of the LED without effecting the state of the rest of the pins, every cycle the current state of the A pins is read, then the same value is returned but with the first bit set to the desired state of the LED. I confirmed that this dose not effect the state of the rest of the A pins by hooking an LED to each one and testing with different starting states for each pin. In every instance only the state of pin A0 changed with each heartbeat cycle. \\
+
+To receive interrupts from a button attached to pin B2, pin 13 of the pico was configured to receive interrupts. On interrupt, the INTFB (0x0f) register is read. If bit 3 is set then we know that the interrupt was caused by the button press, at which point the press is counted and the INTCAPB (0x11) register is read to clear the interrupt.
+
+\section*{Data}
+
+Here you can see the output of the heartbeat task to the serial monitor. This includes some basic debugging information for reading and writing to the A register, as well as a count of the number of button presses and a print statement to show roughly when the button was pressed. \\
+
+\includegraphics[scale=0.3]{images/terminal.png}
+
+Here is an example of the output from a logic analyzer for the initial setup of the GPIO expander. You can see each command being sent. White is the chip select, brown is the clock, red is what is sent out, orange is what is sent in, yellow is the state of the interrupt B pin, and green is the state of the button that causes the interrupt. Every set of 3 bytes is separated by the CS line returning high momentarily as after every command it is disabled instead of being indefinitely set. \\
+
+\includegraphics[scale=0.25]{images/setup.png}
+
+Finally here is an image of the reaction of the chip to an interrupt being sent (blue is the A0 pin). You can see that while the button is pressed shortly after the LED is turned on, it is not until it is turned off again that the expander reacts. This is because no clock pulses are sent in the intervening time, so the chip dose not change state.
+
+\includegraphics[scale=0.5]{images/interrupt.png}
+
+\section*{Results and Analysis}
+
+Interacting with the chip was relatively simple once the transfer functions were working. One issue that was encountered here was that the timing was slightly off initially for reading from the chip. This resulted in the read value decreasing by a semi-random amount each read until it settled on 0x00 or 0x01 as that was constantly being sent. This was solved by including a \lstinline{sleep_ms(0.1)} after every change in clock state. The fact that this worked is slightly odd as that function dose not operate on floats, but only takes int values. Using other even smaller numbers had the same effect with no change in timing, as did using \lstinline{vTaskDelay(0.1)} which also dose not operate on float values. My assumption is that this effectively compiled to a noop or something similar and provided just enough of a delay for accurate reading. \\
+\\
+
+Lab Questions: \\
+The main difference between the provided transfer function and the one on Wikipedia is that there they are shifting the bitmask and using it to or in the received bit rather then shifting the byte to send each clock cycle and using an accumulator to track what is received. Functionally though they are the same.
+\begin{enumerate}
+    \item The use of the A0-3 pins is unusual because usually SPI is used with individual chip select lines. That is to say instead of addressing which device you are talking to like you can with the A pins, you would instead only enable the CS pin of the SPI device you are talking to while the others are left disabled.
+    \item This configuration means that you need fewer pins and traces to communicate with multiple chips. Instead of a unique CS line for each chip, you only need one CS line for every 8 of this chip as each of the 8 can still be addressed individually.
+    \item The bank bit controls how the register are mapped, either interlaced or separated. For my implementation I left them as interlaced.
+    \item The fastest speed I could achieve driving the LED is approximately 40 kHz. This is limited by the fact that to change the LEDs state you need to send 24 clock cycles to send each of a write, address, and state commands. This could possibly be imporved by an increased clock speed, but at faster speeds I was not able to reliably transmit bytes. \\
+    The measurements for a single state change command: \\
+    \includegraphics[scale=0.65]{images/freq.png}
+    \item Yes, this was verified by attaching LEDs to each pin. To manipulate data sent to and received from the expander a union is used. This union consists of a single 8-bit int, and 8 1-bit ints. The 8-bit int is used to set the value that is sent or received, while the 8 1-bit ints are used to easily manipulate the values to send or receive without needing to build bit-masks.
+    \item The resistor ensures that the pin is always in a defined state and removes any risk of damaging the chip by allowing too much current though as well as bad outputs due to a floating pin. An internal version is preferred as it is less hardware on the board, can be controlled via code, and reduces the components that can possibly fail or short.
+    \item To clear the interrupt the expander requires a read command for the associated GPIO or INTCAP register.
+    \item This means that while it is common there is no formal standard. This means that many different devices can communicate via SPI while not adhering to the same standards as each other. This can cause issues when a micro controller needs to talk to multiple different devises via SPI, each with slightly different protocols and tolerances.
+    \item I encountered a latency of at most 0.5s. The reasons for this are described above, but it could potentially be improved by tying the CS line low and clocking in addresses that won't be read (ex. 0xff would just be ignored) so the state of the chip is constantly updated instead of only being updated every heartbeat.
+    \item \begin{enumerate}
+        \item Pin is pulled low via button
+        \item The expander raises interrupt
+        \item The pi gets interrupt via pin 13, causing an isr to fire
+        \item If the interrupt was caused by GPIO 13, the pi reads register INTFB from the chip to determin if it was the cause of the interrupt
+        \item Assuming it was the cause, the pi reads from register INTCAPB to get the state of the pins at the time of the interrupt, clearing the interrupt on the expander as a result.
+        \end{enumerate}
+    \item There could be issues if the interrupt is raised in the middle of the pi sending a command, as it could cause the isr to fire without finishing said command resulting in the expander receiving garbage data and being put out of sync with the pi. This could be solved with a semaphore for reading and writing.
+\end{enumerate}
+
+
+\section*{Conclusion}
+
+The goals of this lab were to implement a basic SPI communication protocol to send output though a GPIO expander and to register input through the same exapnder. In this I was successful. I was able to setup communications with the expander and track that bytes were being sent and received properly via a logic analyzer. I was able to write to output pins on the expander to control an LED with approximately 40 kHz possible speed without effecting any other pin. Finally I was able to receive, respond to, and clear interrupts raised by the expander, as well as determine if said expander was the source of the interrupt.
+
+
+\clearpage
+\section*{Appendix}
+\subsection*{Code A - Final Code}
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily, language=c,breaklines]
+
+Lab4.c
+
+/**
+ * @brief CS466 Lab4 SPI Bit-Bang
+ * 
+ * Copyright (c) 2022 Washington State University.
+ */
+// I keep needing to look this up:
+// make && cp lab4.uf2 /media/ian/RPI-RP2/ && sleep 2 && screen /dev/ttyACM0
+
+#include <stdio.h>
+#include <time.h>
+
+#include <FreeRTOS.h>
+#include <semphr.h>
+#include <task.h>
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+
+#include "mGpio.h"
+#include "mSpi.h"
+#include "myAssert.h"
+
+const uint8_t LED_PIN = 25;
+//const uint8_t SW1_PIN = 17;
+//const uint8_t SW2_PIN = 16;
+
+time_t start_time;
+
+// interrupt semaphore
+static SemaphoreHandle_t _semClk = NULL;
+
+uint32_t heartbeatDelay = 1000;  // ms
+uint32_t debounceDelay = 25; // ms
+
+uint32_t press_count = 0;
+
+// ref: https://forum.microchip.com/s/topic/a5C3l000000MUvHEAW/t348927?comment=P-2709830
+union MY_BYTE {
+    uint8_t allBits;
+    struct {
+        uint8_t bit0    :1;
+        uint8_t bit1    :1;
+        uint8_t bit2    :1;
+        uint8_t bit3    :1;
+        uint8_t bit4    :1;
+        uint8_t bit5    :1;
+        uint8_t bit6    :1;
+        uint8_t bit7    :1;
+    };
+};
+
+void hardware_init(void)
+{
+    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
+
+    mGpioInit();
+}
+//
+// gpioVerifyReadWrite()
+//
+// This is the main function of a task that I'm using to verify that 
+// my GPIO and SPI functionality is working correctly.  It woll be retired 
+// as I move on to actual GPIO-Expander Functionality.
+//
+void gpioVerifyReadWrite(void * notUsed)
+{   
+    const uint32_t queryDelayMs = 100;  // ms
+    uint8_t regValue;
+    uint8_t count=0;
+
+    vTaskDelay(5000);
+
+    while (true) 
+    {
+        mGpioWriteByte(IODIRB, count++);
+        vTaskDelay(0.1);
+        regValue = mGpioReadByte(IODIRB);
+        printf("IODIRB: 0x%02x,  ", regValue);
+        vTaskDelay(0.2);
+
+        regValue = mGpioReadByte(IODIRA);
+        printf("IODIRA: 0x%02x,  ", regValue);
+        vTaskDelay(0.2);
+
+        regValue = mGpioReadByte(IPOLA);
+        printf("IPOLA: 0x%02x\n", regValue);
+
+        vTaskDelay(queryDelayMs);
+    }
+}
+
+// IODIRB: 0x00,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x01,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x02,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x03,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x04,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x05,  IODIRA: 0xff,  IPOLA: 0x00
+// IODIRB: 0x06,  IODIRA: 0xff,  IPOLA: 0x00
+// etc....
+
+
+// generic func to blink led
+void blink_led(int on, int off, int num) {
+    for(int i=0; i<num; i++) {
+        gpio_put(LED_PIN, 0);
+        sleep_ms(off);
+        gpio_put(LED_PIN, 1);
+        sleep_ms(on);
+    }
+}
+
+void set_pin_a1(bool set_to) {
+
+    union MY_BYTE state;
+    state.allBits = mGpioReadByte(OLATA);
+    //state.allBits = 0xff;
+    printf("read state: 0x%02x\n", state.allBits);
+    if (set_to) {
+        state.bit0 = 1;
+        mGpioWriteByte(OLATA, state.allBits);
+        printf("sent state: 0x%02x\n", state.allBits);
+    } else {
+        state.bit0 = 0;
+        mGpioWriteByte(OLATA, state.allBits);
+        printf("sent state: 0x%02x\n", state.allBits);
+    }
+    printf("-----\n");
+}
+
+void isr(uint gpio, uint32_t events_unused) {
+
+    union MY_BYTE int_flags;
+    union MY_BYTE int_state;
+
+    int_flags.allBits = 0x00;
+    int_state.allBits = 0x00;
+
+    // stuff to print timestamp of interrupt
+    time_t cur_time;
+
+    if (gpio == 13) {
+        int_flags.allBits = mGpioReadByte(INTFB);
+        printf("interrupt flag register: 0x%02x\n", int_flags.allBits);
+        if (int_flags.bit2 == 1) {
+            press_count++;
+            cur_time = time(NULL) - start_time;
+            printf("interrupt recieved from button at %i ms since start\n", cur_time);
+            int_state.allBits = mGpioReadByte(INTCAPB);
+            printf("gpio state at interrupt: 0x%02x\n", int_state.allBits);
+        }
+    }
+}
+
+// do this once every tic while idle
+void heartbeat(void * _)
+{   
+    int led_on = 0;
+    // setup to check button state
+    union MY_BYTE state;
+    state.allBits = 0xff;
+    // NOTE: this write is failing for some reason
+    mGpioWriteByte(OLATA, state.allBits);
+
+    state.allBits = mGpioReadByte(GPIOA);
+    printf("read state after setting 0xff: 0x%02x\n", state.allBits);
+
+    while (true) {
+        if (led_on == 0) {
+            gpio_put(LED_PIN, 1);
+            // turn slave chip LED on
+            set_pin_a1(1);
+            led_on = 1;
+        } else {
+            gpio_put(LED_PIN, 0);
+            // turn slave chip OFF on
+            set_pin_a1(0);
+            led_on = 0;
+        }
+        
+        union MY_BYTE reg_b;
+        reg_b.allBits = mGpioReadByte(GPIOB);
+        printf("read state of reg b: 0x%02x\n", reg_b.allBits);
+        printf("current number of button presses: %i\n", press_count);
+        vTaskDelay(heartbeatDelay);
+    }
+}
+
+void cycle_clock(void * _) {
+    vTaskDelay(100);
+    while(true){
+         //if(xSemaphoreTake(_semClk, portMAX_DELAY)) {
+            //xSemaphoreTake(_semClk, portMAX_DELAY);
+            //printf("clk: take sem\n");
+            gpio_put(CS_PIN, 0);
+            for (int i=0; i<8; i++) {
+                setClk(0);
+                setClk(1);
+            }
+            //sleep_ms(1);
+            gpio_put(CS_PIN, 1);
+            vTaskDelay(1);
+            //vTaskDelay(1);
+            //printf("clk: give sem\n");
+            //xSemaphoreGive(_semClk);
+        //}
+    }
+}
+
+int main()
+{
+    stdio_init_all();
+    printf("lab4 Hello!\n");
+
+    sleep_ms(2000);
+
+    hardware_init();
+
+    xTaskCreate(heartbeat, "LED_Task", 256, NULL, 1, NULL);
+    //xTaskCreate(cycle_clock, "Clock", 256, NULL, 1, NULL);
+    //xTaskCreate(gpioVerifyReadWrite, "GPIO_Task", 256, NULL, 2, NULL);
+
+    // set all pins to output
+    mGpioWriteByte(IODIRA, 0x00);
+    // set polarity of pins
+    mGpioWriteByte(IPOLA, 0x00);
+
+    // enable pull up resistors on all pins (only affects ones set as inputs)
+    mGpioWriteByte(GPPUA, 0xff);
+    mGpioWriteByte(GPPUB, 0xff);
+
+
+    // set pin b1 as input
+    mGpioWriteByte(IODIRB, 0x04);
+    // set active low
+    mGpioWriteByte(IPOLB, 0x04);
+    // configure pin b1 as interrupt
+    mGpioWriteByte(GPINTENB, 0x04);
+    // set pin b1 to interrupt when low
+    mGpioWriteByte(DEFVALB, 0x04);
+    mGpioWriteByte(INTCONB, 0x04);
+
+    gpio_set_irq_enabled_with_callback(13, GPIO_IRQ_EDGE_RISE, true, &isr);
+
+    start_time = time(NULL);
+
+    vTaskStartScheduler();
+
+    while(1){};
+}
+
+--------------------------------------------------------------------------------
+
+mSpi.h
+
+#ifndef _SPI_466_H_INCLUDED_
+#define _SPI_466_H_INCLUDED_
+#include <stdint.h>
+
+#define LOW (0)
+#define HIGH (1)
+#define FEATURE_BITBANG_SPI
+
+#ifdef FEATURE_BITBANG_SPI
+#define CS_PIN   17  /* GPIO17 */
+#define CLK_PIN  18  /* GPIO18 */
+#define MOSI_PIN 19  /* GPIO19 */
+#define MISO_PIN 16  /* GPIO16 */
+#endif
+
+
+void    mSpiInit(void);
+void    mSpiStart(void);
+void    mSpiComplete(void);
+uint8_t mSpiTransfer( uint8_t outData);
+void setClk(bool state);
+
+
+#endif  // _SPI_466_H_INCLUDED_
+
+
+--------------------------------------------------------------------------------
+
+mSpi.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+#include "mSpi.h"
+#include "myAssert.h"
+
+
+void mSpiInit(void) {
+    int i = 1;
+}
+
+void mSpiStart(void) {
+    int i = 1;
+}
+
+void mSpiComplete(void) {
+    int i = 1;
+}
+
+uint8_t mSpiTransfer(uint8_t outData) {
+    int i = 1;
+    return i;
+}
+
+
+--------------------------------------------------------------------------------
+
+mGpio.h
+
+#ifndef _MGPIO_466_H_INCLUDED_
+#define _MGPIO_466_H_INCLUDED_
+
+#include <stdint.h>
+
+/*
+** this is the address of that various registers in the GPIO expander.
+** Note that the actual address depends on the setting on the BANK bit.
+** read how to set the bank bit and note the changes it makes in use of
+** device.
+*/
+// set pin direction
+#define IODIRA   0x00
+#define IODIRB   0x01
+// set pin polarity
+#define IPOLA    0x02
+#define IPOLB    0x03
+// enable interrupt on change
+#define GPINTENA 0x04
+#define GPINTENB 0x05
+// default comparison for register
+#define DEFVALA  0x06
+#define DEFVALB  0x07
+// compare settings for interrupts
+#define INTCONA  0x08
+#define INTCONB  0x09
+// control bank bit and other settings
+#define IOCONA   0x0a
+#define IOCONB   0x0b
+// enable pull up resistor
+#define GPPUA    0x0c
+#define GPPUB    0x0d
+// which pin caused interrupt (read only)
+#define INTFA    0x0e
+#define INTFB    0x0f
+// GPIOs at time of last interrupt (read only)
+#define INTCAPA  0x10
+#define INTCAPB  0x11
+// chip GPIO address
+#define GPIOA    0x12
+#define GPIOB    0x13
+// output latch register
+#define OLATA    0x14
+#define OLATB    0x15
+// equivalent to 1000 0000 for binary operations
+#define MASK     0x80
+
+void    mGpioInit(void);
+void    mGpioWriteByte(uint8_t address, uint8_t byte);
+uint8_t mGpioReadByte(uint8_t address);
+
+void setClk(bool state);
+void setOut(uint8_t out);
+uint8_t getIn();
+uint8_t transfer(uint8_t out);
+
+
+#endif // _MGPIO_466_H_INCLUDED_
+
+
+--------------------------------------------------------------------------------
+
+mGpio.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+#include "mGpio.h"
+#include "mSpi.h"
+#include "myAssert.h"
+
+
+const uint8_t GPIO_INT = 13;
+
+
+const uint8_t SW1_PIN = 15;
+const uint8_t SW2_PIN = 14;
+
+
+void mGpioInit(void) {
+    // setup inputs
+    // switches
+    gpio_init(SW1_PIN);
+    gpio_pull_up(SW1_PIN);
+    gpio_set_dir(SW1_PIN, GPIO_IN);
+
+    gpio_init(SW2_PIN);
+    gpio_pull_up(SW2_PIN);
+    gpio_set_dir(SW2_PIN, GPIO_IN);
+
+    // serial data in
+    gpio_init(MISO_PIN);
+    gpio_pull_down(MISO_PIN);
+    gpio_set_dir(MISO_PIN, GPIO_IN);
+
+    // setup inputs
+    // set default values so state is known at startup
+    // clock
+    gpio_init(CLK_PIN);
+    gpio_set_dir(CLK_PIN, GPIO_OUT);
+    gpio_put(CLK_PIN, LOW);
+
+    // chip select
+    gpio_init(CS_PIN);
+    gpio_set_dir(CS_PIN, GPIO_OUT);
+    // set low to read, so default high
+    gpio_put(CS_PIN, HIGH);
+
+    // serial data out
+    gpio_init(MOSI_PIN);
+    gpio_set_dir(MOSI_PIN, GPIO_OUT);
+    gpio_put(MOSI_PIN, LOW);
+
+    // interrupt gpio
+    gpio_init(GPIO_INT);
+    gpio_pull_down(GPIO_INT);
+    gpio_set_dir(GPIO_INT, GPIO_IN);
+    
+}
+
+void setClk(bool state) {
+    // fairly sure this is being treated as a no-op rather then actually sleeping for intended time
+    sleep_ms(0.1); 
+    gpio_put(CLK_PIN, state);
+}
+
+void setOut(uint8_t out) {
+    gpio_put(MOSI_PIN, out);
+}
+
+uint8_t getIn() {
+    return gpio_get(MISO_PIN);
+}
+
+uint8_t transfer(uint8_t out) {
+    uint8_t i, in=0;
+
+    setClk(LOW);
+    for(i=0; i<8; i++) {
+        in <<= 1;
+        setOut(out & MASK);
+        setClk(HIGH);
+        // another no-op like above, but solves timing issue reading as long as set to a number < 1
+        sleep_ms(0.1); 
+        in += getIn();
+        setClk(LOW);
+        out <<= 1;
+    }
+    //in <<= 1;
+    //in +=getIn();
+    setOut(0);
+
+    //printf("in: 0x%02x\n", in);
+
+    return (in);
+}
+
+
+void mGpioWriteByte(uint8_t address, uint8_t byte) {
+    
+    uint8_t preWrite = 0x40;
+
+    gpio_put(CS_PIN, LOW);
+    transfer(preWrite);
+    transfer(address);
+    transfer(byte);
+    gpio_put(CS_PIN, HIGH);
+
+    
+}
+
+uint8_t mGpioReadByte (uint8_t address) {
+
+    uint8_t value, preRead = 0x41;
+
+    gpio_put(CS_PIN, LOW);
+    transfer(preRead);
+    transfer(address);
+    value = transfer(0);
+    gpio_put(CS_PIN, HIGH);
+
+    return value;
+}
+
+\end{lstlisting}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigconf.tex'.

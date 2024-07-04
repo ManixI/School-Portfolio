@@ -1,0 +1,358 @@
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{titlesec}
+\usepackage{courier}
+
+
+\graphicspath{ {./images/} }
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+
+\begin{document}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=c}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+\title{Lab 1}
+\author{
+  \bold Ian Manix \\\
+  }
+
+
+\begin{center}
+   \textbf{Simple Queues, Producer/Consumer, Serial IO and gdb debugging}
+
+   \vspace{.75in}
+
+   by
+
+   \textbf{Ian Manix}
+
+   \vspace{2in}
+
+   CS 466
+
+   LABRATORY REPORT
+
+   \vspace{.75in}
+
+   Computer Science, Washington State University
+
+   February 17, 2023
+
+\end{center}
+
+\clearpage
+\section*{Objectives}
+
+\begin{enumerate}
+    \item To work a very simple Queue example.
+    \item To add Serial debugging IO to your code.
+    \item To analyze assert failures in your code.
+\end{enumerate}
+
+
+%\clearpage
+\section*{Apparatus}
+
+For this lab we used:
+\begin{enumerate}
+  \item 1 raspberry Pi pico 
+  \item 1 breadboard
+  \item 3 push button switches
+  \item 7 jumper cables
+\end{enumerate}
+
+\includegraphics[scale=0.08]{images/setup.jpg}
+
+Along with the two buttons necessary for the input, an additional third button was tied to the reset pin of the Pi so make resetting and re-uploading code easier.
+
+
+\section*{Method}
+
+The shell command: 
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily, language=bash,breaklines]
+make && cp lab3.uf2 /media/ian/RPI-RP2/ && sleep 2 \ 
+&& screen ~/kermACM0
+\end{lstlisting}
+
+was used here to compile the code, send it to the pi, then to wait two seconds before opening a serial reader. The command above is a modified version for my own machine from the code in the handout. \
+
+The code for the final implementation is in the appendix under Code A. It works by setting up a consumer task and two producer tasks. The producer tasks are both running the same function, but they are passed different initialization parameters in the form of a struct that contains the name of the task, an int related to the task, the average delay for the producer, and the que handle. The struct is received as a \lstinline{void**} and must is cast to the correct structure so it can be properly referenced. The struct received by the producer functions is also what is pushed into the que so the consumer can reference any information about the producer task that added it. The producer pushes a copy of the struct to the que then asserts that there are less then 20 items in the que (that it is not full). The consumer blocks until it detects something in the que, and then it runs blinking the LED as applicable. The function that blinks the LED dose so via \lstinline{sleep_ms()} instead of \lstinline{vTaskDelay()} so that it will have control of the LED for the full blink pattern. This also causes the que to overflow if a switch is held down as it drastically decreases the rate at which the consumer removes objects from the que. \
+
+I also needed to modify the myAssert.h code as line 10 contains a type \lstinline{(void 0)} instead of \lstinline{(void) 0}. A second error was encountered where the assert code was not throwing errors even if \lstinline{NDEBUG} was not defined, so I ended up needing to comment out lines 9-11 to solve the issue.
+
+
+\section*{Data}
+
+Here you can see the output of the heartbeat task to the serial monitor from the basic heartbeat implementation. The state of the que, consumer, and switches was also tracked via \lstinline{printf()} statements to ensure it was producing the expected behavior and wasn't doing something that looked similar but was incorrect.
+
+\includegraphics[scale=0.7]{images/heartbeat-output.png}
+
+When the priority of the producer tasks is set above that of the consumer task, it causes the que to overflow after a period of time triggering an error state via \lstinline{myAssert()}. This happens because spare more processor time is given to the producers before the consumer, meaning they will add to the que faster then the consumer removes from it.
+
+
+\section*{Results and Analysis}
+
+Setting up the heartbeat task alone took little effort. The code used can be seen in the appendix under Code B, but simply blinking the LED and printing to the console took very little work as the code already existed from lab 2. \
+
+\lstinline{myAssert()} is used to stop whatever the current task is and return an error both by blinking the LED in a rapid fashion and by printing the location of the failed assert to the console. This was used both in debugging to return an error if an unexpected value is passed without needing to use and then disable or remove \lstinline{printf()} statements, as well as reporting an error caused by the user. In this lab it is used to put the pi in an error state whenever the que fills up. \
+To verify that producer one and two were producing at the correct rate via LED, code was added so that the LED flashes once every time something put into the que by producer 1 is popped while switch one is held, and it flashes twice at half the duration for items from producer 2 while button two is held. This was further verified by print statements triggered at the same time as the LED flashes. \
+
+Use of \lstinline{myAssert()} is useful in this project as oppose to using \lstinline{assert()} from the default library for several reasons. First, disabling it via macro can be written into the header file instead of needing to add macros for every instance of \lstinline{assert()}. Second, it lets us control the behavior of the failed assert, so example I could set it to produce an error and then re-set the pi instead of simply sitting indefinitely in an error state.
+
+
+\section*{Conclusion}
+
+The objectives of implementing a basic que, using \lstinline{printf()} to debug code via serial monitor, and analyzing assert failures were successful. The use of \lstinline{printf()} statements to debug is apparent in the heartbeat output, and it was also used in debugging several issues in the code. Using assert to detect and throw errors can be seen in the forced asserts used to test the function, as well as in the fact that asserts are failed when a button is held too long. Because of these the fact that the que was correctly implemented is implied as the code would not function were it not. Aside from those objectives an error was found in myAssert.h. In line 10 \lstinline{define myAssert(expr) (void 0)} should instead be \lstinline{define myAssert(expr)    (void) 0}. Oddly enough there was no use of gbd for debugging even though it is in the title of the lab handout. One of the big takeaways not part of the stated objective was that while you need to pass a \lstinline{void*} to a task to send the function a parameter, the function receives that \lstinline{void*} as a \lstinline{void**} instead. This was the single largest hangup in the this lab.
+
+
+\clearpage
+\section*{Appendix}
+\subsection*{Code A - Final Code}
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily, language=c,breaklines]
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+#include "myAssert.h"
+
+const uint8_t LED_PIN = 25;
+const uint8_t SW1_PIN = 17;
+const uint8_t SW2_PIN = 16;
+
+uint32_t heartbeatDelay = 1000;  // ms
+uint32_t debounceDelay = 25; // ms
+
+// struct of message that both sets up producers and what they send
+typedef struct {
+    int priority;
+    int mean_delay;
+    char *name;
+    QueueHandle_t que;
+} que_msg;
+
+void hardware_init(void)
+{
+    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
+
+    gpio_init(SW1_PIN);
+    gpio_pull_up(SW1_PIN);
+    gpio_set_dir(SW1_PIN, GPIO_IN);
+
+    gpio_init(SW2_PIN);
+    gpio_pull_up(SW2_PIN);
+    gpio_set_dir(SW2_PIN, GPIO_IN);
+}
+
+// generic func to blink led
+void blink_led(int on, int off, int num) {
+    for(int i=0; i<num; i++) {
+        gpio_put(LED_PIN, 0);
+        sleep_ms(off);
+        gpio_put(LED_PIN, 1);
+        sleep_ms(on);
+    }
+}
+
+// do this once every tic while idle
+void heartbeat(void * que_v)
+{   
+    QueueHandle_t que = ((que_msg*) que_v)->que;
+    int count = 0;
+    // setup to check button state
+    while (true) {
+        count++;
+        printf("tick %i, SW1: %i, SW2: %i\n", count, 1-gpio_get(SW1_PIN), 1-gpio_get(SW2_PIN));
+        printf("msg in que: %i\n", uxQueueMessagesWaiting(que));
+        gpio_put(LED_PIN, 1);
+        vTaskDelay(heartbeatDelay);
+        gpio_put(LED_PIN, 0);
+        vTaskDelay(heartbeatDelay);
+    }
+}
+
+// produces a rand range, more clear then the math even if one liner
+int rand_range(int low, int high) {
+    return (rand() % high - low + 1) + low;
+}
+
+// pops from que and dose things
+void consumer(void * que_v) {
+    // received as pointer to pointer, need to cast to correct value
+    QueueHandle_t que = ((que_msg*) que_v)->que;
+    que_msg * buf = (que_msg*) malloc(sizeof(que_msg));
+    buf->name = (char*) calloc(255, sizeof(char));
+
+    while(true)
+    {
+        // Note: que empty because writing to null is too fast to see things added to que
+        xQueueReceive(que, buf, portMAX_DELAY);
+        // if not buf, the probably a time out error, expressions likely incorrect though
+        if(buf) { 
+            if (!gpio_get(SW1_PIN) && buf->priority == 1) {
+                printf("recieved message 1\n");
+                // blink 3x a second for one second
+                blink_led(1000/6, 1000/6, 1);
+            } else if (!gpio_get(SW2_PIN) && buf->priority == 2){
+                printf("recieved message 2\n");
+                blink_led(1000/12, 1000/12, 2);
+            }
+        } 
+        taskYIELD();
+    }
+}
+
+// produces items to add to que
+void producer(void * que_v) {
+    // received as pointer to pointer, need to cast to value
+    que_msg msg = *(que_msg*)que_v;
+    QueueHandle_t que = msg.que;
+
+    while(1) {
+        vTaskDelay(rand_range(0, 2 * msg.mean_delay - 1));
+        // send full struct in case name or average delay is important to consumer
+        xQueueSendToBack(que, &msg, 0);
+        // error if que is full
+        myAssert((uxQueueSpacesAvailable(que) > 0));
+        taskYIELD();
+    }
+}
+
+
+void test_assert(void * unused) {
+    printf("assert task started\n");
+    while(1) {
+        vTaskDelay(7000);
+        printf("asserting\n");
+        myAssert(true);
+    }
+}
+
+int main()
+{
+    stdio_init_all();
+    sleep_ms(2000);
+    printf("lab3 Hello!\n");
+    hardware_init();
+
+    QueueHandle_t que = xQueueCreate(20, sizeof(que_msg));
+    myAssert(que);
+
+    que_msg msg_arr[] = {
+        {1, 95, "producer1", que},
+        {2, 95, "producer2", que}
+    };
+    printf("%i bytes\n", sizeof(que_msg));
+    printf("%i bytes\n", sizeof(&msg_arr[0]));
+
+    xTaskCreate(heartbeat, "heartbeat", 256, (void*) &msg_arr[0], 0, NULL);
+    xTaskCreate(consumer, "consumer", 256, (void*) &msg_arr[0], 2, NULL);
+    xTaskCreate(producer, "producer1", 256, (void*) &msg_arr[0], 3, NULL);
+    xTaskCreate(producer, "producer2", 256, (void*) &msg_arr[1], 3, NULL);
+    
+    vTaskStartScheduler();
+
+    while(1){};
+}
+
+\end{lstlisting}
+
+\subsection*{Code B - Heartbeat Only}
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily, language=c,breaklines]
+#include <stdio.h>
+
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+
+const uint8_t LED_PIN = 25;
+
+uint32_t heartbeatDelay = 1000;  // ms
+
+void hardware_init(void)
+{
+    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
+}
+
+void heartbeat(void * notUsed)
+{   
+    int count = 0;
+    // setup to check button state
+    while (true) {
+        count++;
+        printf("tick %i, SW1: %i, SW2: %i\n", count, 1-gpio_get(SW1_PIN), 1-gpio_get(SW2_PIN));
+        gpio_put(LED_PIN, 1);
+        vTaskDelay(heartbeatDelay);
+        gpio_put(LED_PIN, 0);
+        vTaskDelay(heartbeatDelay);
+    }
+}
+
+int main()
+{
+    stdio_init_all();
+    printf("lab3 Hello!\n");
+    hardware_init();
+
+    xTaskCreate(heartbeat, "heartbeat", 256, NULL, 0, NULL);
+
+    vTaskStartScheduler();
+
+    while(1){};
+}
+
+\end{lstlisting}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigconf.tex'.

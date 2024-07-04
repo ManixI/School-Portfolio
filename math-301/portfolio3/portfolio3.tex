@@ -1,0 +1,148 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Portfolio 3} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\begin{enumerate}
+  \item Prove that polynomials in $\mathbb{Z}_3[i]=\{a+bi:a,b\in\mathbb{Z}$ form a vector space assuming $\mathbb{Z}_3[i]$ is a field.\\
+        Let $\mathbb{X}_3[1]$ be a field.\\
+        For polynomials in $\mathbb{Z}_3[i]=\{a+bi:a,b\in\mathbb{Z}$ to form a vector space, they must meet 10 axioms.\\
+        Given that $\mathbb{Z}_3[i]$ is a field, by definition it must be closed under addition, commutative, associative, there is a 0 element, there is an additive inverse for every element, there is an identity element 1, and it is closed under scalar multiplication.\\
+        Then, because multiplication is distributive by definition of a field, it follows that in $\mathbb{Z}_3[i]$, scalar and field multiplication are compatible, that scalar multiplication is distributive in regards to field addition, and that scalar multiplication is distributive in regards to vector addition.\\
+        Thus, since all elements of a vector space are satisfied, polynomials in $\mathbb{Z}_3[i]=\{a+bi:a,b\in\mathbb{Z}$ form a vector space.
+
+  \item Find all zeros and fully factor $p(x)=x^5+(1+i)x^4+2ix^3+(2+i)x^2+2+2i$ in $\mathbb{Z}_3[i]$.\\
+        $p(0)=0^5+(1+i)0^4+2i0^3+(2+i)0^2+2+2i=2+2i$.\\
+        $p(1)=1+(1+i)+2i+(2+i)+2+2i=6+6i\equiv 0$.\\
+        $p(2)=32+(1+i)16+2i8+(2+i)4+2+2i=58+38i\equiv 1+2i$.\\
+        $p(i)=i+(1+i)+2+(2+i)+2+2i=7+5i\equiv1+2i$.\\
+        $p(2i)=32i+(1+i)16+16+8+4i+2+2i=42+54i\equiv0$.\\
+        $p(1+i)=12+6i\equiv0$.\\
+        $p(2+i)=87+75i\equiv0$.\\
+        $p(1+i2)=54+84i\equiv0$.\\
+        $p(2+2i)=230+206i\equiv2+2i$.\\
+        Therefor the zeros are 1, 2i, (1+i), (1+2i), and (2+i).\\
+        Thus the fully factored polynomial is $p(x)=x^5+(1+i)x^4+2ix^3+(2+i)x^2+2+2=(x-1)(x-2i)(x-(1+i))(x-(1+2i))(x-(2+i))$.
+
+  \item Disprove the following. A polynomial in $\mathbb{Z}_n$ has more zeros then it's highest power.\\
+        Take the polynomial $f(x)=x^2$ in $\mathbb{Z}_3$.\\
+        The values of this are $f(0)=0$, $f(1)=1$, and $f(2)=4\equiv 1$.\\
+        Thus $f(x)=x^2$ has 1 zero, which is not greater then it's highest power of $x^2$.\\
+        Therefor the statement is false.
+
+  \item Find the limit of $f(x)=\ln(5x^4-x^3-3)$ at $x=1$ assuming $ln(x)$ is continuous.\\
+        %First, because $ln(x)$ is continuous, $\lim_{x\to1}\ln(5x^4-x^3-3)$ can be written as $\ln(\lim_{x\to1}5x^4-x^3-3)$ by properties of continuity.\\
+        First, $f(1)=\ln5(1)^4-1^3-3=\ln1=0$, so $|\ln(5x^4-x^3-3)-0|<\epsilon$.\\
+        And we know that given any $|\epsilon>0$, there exists $\delta>0$ such that for all $x\neq c$, if $|x-c|<\delta$, then $|f(x)-L|<\epsilon$.\\
+        Then, because $\ln(x)$ is continuous we can say $|5x^4-x^3-4|<\epsilon$.\\
+        Next let $\delta=\frac{\epsilon}{5}$ so:\\
+        $|x-1|<\delta=\frac{\epsilon}{5}$\\
+        $-\frac{\epsilon}{5}<x-1<\frac{\epsilon}{5}$\\
+        $1-\frac{\epsilon}{5}<x<1+\frac{\epsilon}{5}$.\\
+        Then take $|5x^4-x^3-4|=5(1+\frac{\epsilon}{5})^4-(1+\frac{\epsilon}{5})^3-4|$.\\
+        Because both $(1+\frac{\epsilon}{5})^4$ and $(1+\frac{\epsilon}{5})^3$ approach 1 we can say $|5x^4-x^3-4|<\epsilon$.\\
+        Therefor we can verify that $\lim_{x\to1}\ln(5x^4-x^3-3)$ is indeed 0.
+
+        %So let $|x-1|<\delta=\frac{\sqrt{\sqrt20\epsilon+121}-1}{\sqrt{10}}-1$.\\
+
+
+        %$|5x^4-x^3-3-1|<\epsilon$.\\
+        %$|x^3(5x-1)|<\epsilon+4$.\\
+        %$|5x-1|<\frac{\epsilon+4}{x^3}$.\\
+        %$|x-\frac{1}{5}|<\frac{\epsilon+4}{5x^3}$.\\
+        %$|x-1|<\frac{\epsilon+4}{5x^3}-\frac{4}{5}$.\\
+        %Then $|x-1|<\delta=\frac{\sqrt{\sqrt20\epsilon+121}-1}{\sqrt{10}}-1$ implies $|\ln(5x^4-x^3-3)-L|<\epsilon$ for $\epsilon>0$.\\
+
+        %Because $ln(x)$ is continuous, $\lim_{x\to1}\ln(5x^4-x^3-3)$ can be written as $\ln(\lim_{x\to1}5x^4-x^3-3)$
+
+\end{enumerate}
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+\\
+\\
+JUDSON, T. (2023). Abstract algebra: Theory and applications. ORTHOGONAL PUBLISHING L3C. 
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

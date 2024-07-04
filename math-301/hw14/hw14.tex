@@ -1,0 +1,154 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+\usepackage{array}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 14} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\subsection*{13.2}
+\begin{itemize}
+  \item[3.] Prove that $\lim_{x\to0}(x+2)=2$.\\
+            Given $\epsilon >0$.\\
+            Then let $\delta=\epsilon$.\\
+            Thus $0<|x+2-2|=|x-0|<\delta$.\\
+            Therefor $\lim_{x\to0}(x+2)=2$ by definition 13.2.\\
+
+  \item[5.] Prove that $\lim_{x\to3}(x^2-2)=7$.\\
+            Given $\epsilon>0$.\\
+            Then let $\delta=\epsilon$.\\
+            So $|(x^2-2)-7|=|x^2-9|=|(x+3)(x-3)|$.\\
+            If $|x-3|\leq1$ then $|x+3|\leq|x-3|+|6|\leq7$.\\
+            This means that $|x-3|*|x-3|<7|x-3|$.\\
+            Then take $\delta$ to be smaller then both 1 and $\frac{\epsilon}{7}$.\\
+            So $0<|x-3|<\delta\implies|(x^2-2)-7|<7|x-3|<7\delta<s\frac{\epsilon}{7}=\epsilon$.\\
+            Thus $\lim_{x\to3}(x^2-2)=7$.
+\end{itemize}
+
+\subsection*{13.4}
+\begin{itemize}
+  \item[6.] Prove the squeeze theorem: Suppose $g(x)\leq f(x)\leq h(x)$ for all $x\in\mathbb{R}$ satisfying $0<|x-c|<\delta$ for some $\delta>0$. If $\lim_{x\to c}g(x)=\lim_{x\to c}h(x)$=L, Then $\lim_{x\to c}f(x) = L$.\\ 
+            Suppose $g(x)\leq f(x)\leq h(x)$ for all $x\in\mathbb{R}$ satisfying $0<|x-c|<\delta$ for some $\delta>0$ and $\lim_{x\to c}g(x)=\lim_{x\to c}h(x)=L$.\\
+            Then because $0|x-c|<\delta$, $0<f(x)-g(x)<h(x)-g(x)$.\\
+            So $\lim_{x\to c}(f(x)-g(x)=\lim_{x\to c}f(x)-\lim_{x\to c}g(x)=\lim_{x\to c}f(x)-L=0$ by theorem 13.6.\\
+            Also $\lim_{x\to c}(h(x)-g(x))=\lim_{x\to c}h(x)-\lim_{x\to c}g(x)=L-L=0$.\\
+            So because $\lim_{x\to c}(f(x)-g(x)=0$ and $\lim_{x\to c}f(x)-L=0$, $\lim_{x\to c}f(x)=L$.
+
+
+\end{itemize}
+
+\subsection*{13.7}
+\begin{itemize}
+  \item[2.] Prove that $\{5+\frac{2}{n^2}\}$ converges to 5.\\
+            Suppose $\epsilon>0$.\\
+            The chose an integer $N>\frac{2}{\epsilon}$ so that $\frac{2}{N^2}>\epsilon$.\\
+            Then if $n>N$, we have $|a_n-5|=|(5+\frac{2}{n^2})-5|=\frac{2}{n^2}<\frac{2}{N^2}<\epsilon$.\\
+            By definition 12.5 the sequence $\{5+\frac{2}{n^2}\}$ converges to 5.
+  \item[4.] Prove that $\{1-\frac{1}{2^n}\}$ converges to 1.\\
+            Suppose $\epsilon>0$.\\
+            The chose an integer $N>\frac{1}{\epsilon}$ so that $\frac{1}{2^N}>\epsilon$.\\
+            Then if $n>N$, we have $|a_n-1|=|(1-\frac{1}{2^n})-1|=\frac{1}{2^n}<\frac{1}{2^N}<\epsilon$.\\
+            By definition 12.5 the sequence $\{1-\frac{1}{2^n}\}$ converges to 1.
+  \item[10.] Prove that if $\{a_n\}$ converges to L and $\{b_n\}$ converges to M, then the sequence $\{a_n+b_n\}$ converges to $L+M$.\\
+            Let $\{a_n\}$ converge to L and $\{b_m\}$ converge to M.\\
+            Then there must exist integers $N_1$ and $N_2$ such that for all $n<N_1$, $|a_n-L|<\frac{\epsilon}{2}$ and for all $n<N_2$, $|b_n-M|<\frac{\epsilon}{2}$.\\
+            Now let $N=Max(N_1,N_2)$.\\
+            So $|(a_n+b_n)-(L+M)|=|(a_n-L)+(b_n-M)|$.\\
+            Then $|(a_n-L)+(b_n-M)|\leq|a_n-L|+|b_n-M|\leq\frac{\epsilon}{2}+\frac{\epsilon}{2}=2$.\\
+            Therefor because $|(a_n-L)+(b_n-M)|<\epsilon$, $\{a_n+b_n\}$ converges to $L+M$.
+\end{itemize}
+
+
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+\subsection*{Reference:}
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+\\
+\\
+JUDSON, T. (2023). Abstract algebra: Theory and applications. ORTHOGONAL PUBLISHING L3C.
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

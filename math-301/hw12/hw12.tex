@@ -1,0 +1,133 @@
+
+\documentclass[sigconf]{article}
+\usepackage{savesym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+\usepackage{mathrsfs}
+\usepackage{realhats}
+\usepackage{array}
+%\usepackage{MnSymbol}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 12} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\begin{enumerate}
+  \item Symmetries of a triangle:\\
+      \begin{tabular}{c|cccccc}
+      X      & $i$    & $r$    & $r^2$ & $s$ & $sr$ & $sr^2$ \\
+      \hline
+      $i$    & $i$    & $r$    & $r^2$  & $s$    & $sr$   & $sr^2$ \\
+      $r$    & $r$    & $r^2$  & $i$    & $sr^2$ & $s$    & $sr$ \\
+      $r^2$  & $r^2$  & $i$    & $r$    & $sr$   & $sr^2$ & $s$\\
+      $s$    & $s$    & $sr$   & $sr^2$ & $i$    & $r$    & $s^2$\\
+      $sr$   & $sr$   & $sr^2$ & $s$    & $r^2$  & $i$    & $r$\\
+      $sr^2$ & $sr^2$ & $s$    & $sr$   & $r$    & $r^2$  & $i$\\
+    \end{tabular}\\
+    Where $i$ represents the identity permutation, $s$ represents reflection across the axes of symmetry, $r$ represents a rotation of 120 degrees, and $r^2$ a rotation of 240 degrees.
+  \item The symmetries of a triangle are a group because it is associative, there is an identity element, and there is an inverse element for every element.\\
+      The identity element is $i$ which represents the triangle having neither reflected nor rotated.\\
+      The fact that there is an inverse element for every element is shown in the table above by the fact that every for and every column has at least one $i$ in it.\\
+      It is associative because every result is the same triangle, so no matter the order of operations the result is always the same.
+  \item There are three subgroups, one consisting of only the operation $s$ and the other consisting of the operations $r$ and $r^2$, as well as the trivial subgroup. The first two subgroups are both cyclical as the first consists of only one element, and the second has the generator $r$
+  \item $\mathbb{Z}$ is a subgroup of $\mathbb{R}$.\\
+      The identity element of $\mathbb{R}$ is $0$ which is in $\mathbb{Z}$.\\
+      Then the inverse of any element $e\in\mathbb{Z}$ is $-a$.\\
+      Finally because addition is associative in $\mathbb{R}$ it is associative in $\mathbb{Z}$.
+  \item Any group that is uncountable cannot be cyclic.\\
+        Suppose there exists an uncountable cyclic group $A$.\\
+        Thus there must exist $e\in A$ such that every element of $A$ can be written as $a^n$for $n\in\mathbb{Z}$.\\
+        So $A=\{a^n:n\in\mathbb{Z}\}$.
+        And because a countable union of countable sets is countable, $A$ must be countable because it is a union between 2 sets $A$ and $\mathbb{Z}$ and $\mathbb{Z}$ is countable.\\
+        But $A$ was uncountable, which is a contradiction.\\
+        Therefor any group that is uncountable cannot be cyclic.
+\end{enumerate}
+
+
+
+% $\mathscr{P}$
+% $\hat[ash]{a}$
+\subsection*{Reference:}
+Hammack, R. H. (2009). Book of Proof.\\ https://orion.math.iastate.edu/jdhsmith/class/BookOfProof.pdf
+\\
+\\
+JUDSON, T. (2023). Abstract algebra: Theory and applications. ORTHOGONAL PUBLISHING L3C.
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

@@ -1,0 +1,144 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Homework 2} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{2.6}
+\begin{itemize}
+  \item[3.] \hfill
+\begin{center}
+\begin{tabular}{ |c|c||c||c|c|}
+\hline
+P & Q & $\neg P$ & $P \Rightarrow Q$ & $(\neg P) \lor Q$ \\
+\hline
+T&T&F&T&T\\
+\hline
+T&F&F&F&F\\
+\hline
+F&T&T&T&T\\
+\hline
+F&F&T&T&T\\
+\hline
+\end{tabular}
+\end{center}
+
+\item[5.] \hfill
+\begin{center}
+\begin{tabular}{ |c|c|c||c|c|}
+\hline
+P & Q & R & $\neg (P \lor Q \lor R)$ & $(\neg P) \land (\neg Q) \land (\neg R)$ \\
+T&T&T&F&F\\
+\hline
+T&T&F&F&F\\
+\hline
+T&F&T&F&F\\
+\hline
+T&F&F&F&F\\
+\hline
+F&T&T&F&F\\
+\hline
+F&T&F&F&F\\
+\hline
+F&F&T&F&F\\
+\hline
+F&F&F&T&T\\
+\hline
+\end{tabular}
+\end{center}
+\end{itemize}
+
+\section*{2.7}
+\begin{enumerate}
+  \item True. For all real numbers the square of a real number is greater then 0
+  \item True. For all real numbers, there exists a natural power of that number of that number that is greater or equal to 0.
+  \item True. There exists a real number for which all real numbers x multiplied by it result in the value x. 
+\end{enumerate}
+
+\section*{2.9}
+\begin{itemize}
+  \item[2.] $(x \; is \; positive) \land \neg(y \; is \; positiveb)$
+  \item[5.] $\forall \epsilon \ni \epsilon > 0, \exists \delta \ni \delta > 0, |x-a| < \delta \Rightarrow |f(x)-f(a)| < \epsilon $
+\end{itemize}
+
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput
+'.

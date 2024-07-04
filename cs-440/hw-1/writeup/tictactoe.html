@@ -1,0 +1,105 @@
+<h1>Tic-Tac-Toe</h1>
+
+<p>Tic-Tac-Toe is not the most sophisticated game, but it has the nice
+property that the rules are simple, and the total number of game
+states (3^9) can be enumerated easily. Further, each game has a finite
+length.  In this Python warmout assignment, you'll build a simple
+Tic-Tac-Toe class to assist with playing the game. For full credit,
+however, your game will need to be generalized beyond a 3x3 board to
+an NxN board.  A simple stub module has been provided.</p>
+
+<h1>Overview</h1>
+<ol>
+<li>Download the stub <code>tictactoe.py</code> and open it in your favorite editor (emacs, right?!).</li>
+<li>Look through the code.  I've written some functionality, and the goal is for you to complete it.</li>
+<li>Note that there are 5 methods/functions that are unimplemented, these are where you should add your code.</li>
+<li>Note further that the code assumes four spaces of indentation. Set your editor appropriately, this is the default for many.</li>
+</ol>
+
+
+<h1>Implement the methods</h1>
+<p>Once the methods are implemented, you should be able to play the game
+of tic-tac-toe by running on the command line as follows:</p>
+<pre><code>&gt;python tictactoe.py --play
+</code></pre>
+<p>My input/output looks like this (but yours may differ based on your show() method):</p>
+<pre><code>   |   |
+-----------
+   |   |
+-----------
+   |   |
+X's turn...(0..8)
+0
+ X |   |
+-----------
+   |   |
+-----------
+   |   |
+O's turn...(0..8)
+2
+
+&lt;&lt;&lt; moves happen... &gt;&gt;&gt;
+
+X |   | O
+-----------
+ X | X |
+-----------
+ O | O |
+X's turn...(0..8)
+8
+ X |   | O
+-----------
+ X | X |
+-----------
+ O | O | X
+Game Over!  X (1) wins @ Diagonal Upper Left
+</code></pre>
+
+Your code should also be able to handle arbitrary sized games, and games that start from a non-empty board state. You can test this with the optional -n and --state arguments on the command line:
+
+<pre><code>
+>python src-python/tictactoe.py --play -n 4
+
+   |   |   |
+---------------
+   |   |   |
+---------------
+   |   |   |
+---------------
+   |   |   |
+X's turn...(0..15)
+13
+   |   |   |
+---------------
+   |   |   |
+---------------
+   |   |   |
+---------------
+   | X |   |
+O's turn...(0..15)
+</code></pre>    
+
+<p>The final part of the assignment is optional, and asks for you to
+  write a function that will run a simulation of randomly played
+  games. If implemented, you should be run a simulation like this:</p>
+
+<pre><code>&gt;python cs440/tictactoe/src-python/tictactoe.py --state 121221210 --mc 10
+State is: (1, -1, 1, -1, -1, 1, -1, 1, 0)
+10 trials: 1 wins 1.00, -1 wins 0.00, stalemates 0.00
+</code></pre>
+
+<p>Note that at the command line, you represent the state with {0,1,2}
+not {0,1,-1}. Eventhough the moves above are selected "randomly", the
+only remaining move makes 'X' win every time.</p>
+
+<h1>Final Steps</h1>
+<p>Be sure to document your is_win() method to describe each major code block. I
+  need to be able to assess how you're going about checking for wins.
+  
+<h1>Turn in your code</h1>
+
+<p>  Submit your code via Autolab, if you find
+any problems with the test suite, or bugs/inconsistencies with the
+assignment I am always willing to give extra credit points for useful
+bug reports.
+</p>

@@ -1,0 +1,136 @@
+
+\documentclass[sigconf]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{courier}
+\usepackage{pdfpages}
+\usepackage{txfonts}
+
+
+\usetikzlibrary{er,positioning, arrows.meta}
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=Java}
+
+
+
+\graphicspath{ {./images/} }
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+%\AtBeginDocument{%
+%  \providecommand\BibTeX{{%
+%    Bib\TeX}}}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [{\titlerule[0.3pt]}]
+
+  \titleformat{\title}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {{\titlerule[0.8pt]}}
+  [{\titlerule[0.8pt]}]
+
+
+\title{
+  %\line(1,0){250} \\
+  \textbf{Preparation 4} \\
+  %\large \textbf{A game review} \\
+  %\line(1,0){250}
+  }
+\author{ 
+  Ian Manix
+  }
+
+
+%\renewcommand*\contentsname{Table of Contents}
+
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+
+
+
+\maketitle
+
+%\clearpage
+
+
+
+%\clearpage
+%\addcontentsline{toc}{section}{Concept}
+\section*{1}
+\begin{itemize}
+  \item[6.] \{3, -3\}
+  \item[25.] $\{x\in \mathbb{Z}: -4 \leq x \leq 2\}$
+  \item[33.] 19
+\end{itemize}
+
+\section*{3}
+\begin{itemize}
+  \item[8.] $\emptyset,\; \{0\},\; \{0, 1, \{2\}\},\; \{0,1\},\;\{\{0\},\{0,1\}\},\; \{\{0,1,\{2\}\},\{0,1\}\},\; \\ \{\{0,1\},\{0,1,\{2\}\}\},\; \{\{0\},0,1\},\{0,1,\{2\}\}\}\;$
+  \item[9.] $\{2\}$
+\end{itemize}
+
+\section*{5}
+\begin{itemize}
+  \item[1.] \begin{itemize}
+    \item[a)] \{4, 6\}
+    \item[b)] \{4, 3, 6, 7, 1, 9, 5, 8\}
+    \item[c)] \{3, 7, 1, 9\}
+    \item[d)] \{2, 6, 7, 1, 9\}
+    \item[e)] \{5, 8\}
+    \item[f)] \{4\}
+    \item[g)] \{4, 5, 8\}
+    \item[h)] \{4, 5, 8 8\}
+    \item[i)] $\emptyset$
+    \end{itemize}
+\end{itemize}
+
+\section*{6}
+\begin{itemize}
+  \item[1.] \begin{itemize}
+    \item[a)] \{0, 2, 5, 8, 10\}
+    \item[b)] \{0, 1, 2, 3, 5, 7, 9, 10\}
+    \item[c)] $\emptyset$
+    \item[d)] \{0, 1, 2,...,10\}
+    \item[e)] \{4, 3, 6, 7, 1, 9\}
+    \item[f)] \{4, 6\}
+    \item[g)] \{5, 8\}
+    \item[h)] \{5, 8\}
+    \item[i)] \{0, 1, 2, 3, 4, 6, 7, 9, 10\}
+    \end{itemize}
+\end{itemize}
+
+\section*{7}
+\begin{itemize}
+  \item[2.] \includegraphics{images/2.png}
+  \item[3.] \includegraphics{images/3.png}
+  \item[4.] \includegraphics{images/4.png}
+\end{itemize}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
+\end{document}
+\endinput

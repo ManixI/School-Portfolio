@@ -1,0 +1,97 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{apacite}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage{fontenc}
+%\usepackage{fontspec}
+\usepackage{amsmath}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily, language=SQL}
+
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+    \begin{FlushLeft}
+        Ian Manix
+
+        Problem Set 4
+
+        March 20, 2023
+    \end{FlushLeft}
+
+
+    \section*{1}
+    E  - Unicorn
+    U  - Unicorn is mythical \\
+    I  - Unicorn is immortal \\
+    M  - Unicorn is a mammal \\
+    H  - Unicorn is horned \\
+    Mg - Unicron is magical \\
+    \begin{enumerate}[a)]
+      
+        % 1
+        \item 
+            \begin{itemize}
+                \item $E \implies I \lor M$
+                \item $U \implies I$
+                \item $\neg{U} \implies M$
+                \item $(M \lor I) \implies H$
+                \item $ H \implies Mg$
+            \end{itemize}
+            \item The unicorn is Magical \\
+            $\forall{x}\; (Immortal(x) \lor Mammal(x)) \land (\neg Imortal(x) \lor \neg Mammal(x)) $ \\
+            $\forall{x}\; Mammel(x) \lor Imortal(x) \implies Horned(x)$ \\
+            $\forall{x}\; Horned(x) \implies Magical(x)$ \\
+            $\forall{x}\; Magical(x)$
+
+        \item The unicorn is Horned \\
+            $\forall{x}\; (Immortal(x) \lor Mammal(x)) \land (\neg Imortal(x) \lor \neg Mammal(x)) $ \\
+            $\forall{x}\; Mammel(x) \lor Imortal(x) \implies Horned(x)$ \\
+            $\forall{x}\; Horned(x) \implies Magical(x)$ \
+            $\forall{x}\; Horned(x)$ \\
+
+        \item Given the information avaliable it is impossible to say if the unicorn is mythical or not. Assuming a unicorn being magical has no baring on it's status as mythical, there is nothing in the quote that implies a unicorn is mythical, only information that is implied by a unicorn being mythical or not mythical.
+
+
+    \end{enumerate}
+
+    \section*{2}
+
+    Functions:
+    \begin{itemize}
+        \item Student() - is a student
+        \item French() - took french class
+        \item Passed\_F() - passed french
+        \item Greek() - took greek class
+        \item Grade\_L() - grade in language class
+        \item Best\_Grade(x,y) - $\forall x \; \exists y\; (Grade(y) >= Grade(x)) \land Student(x,y)$, Highest scoring student in language class
+    \end{itemize}
+
+    Sentences 
+    \begin{enumerate}[a)]
+      
+        % 1
+        \item $\exists x\; Student(x) \land French(x)$
+        \item $\forall x\; (Student(x) \land French(x)) \implies Passed\_F(x)$
+        \item $\exists x\; Greek(x) \iff x$
+        \item $\forall x \; (Best\_Grade(x) \land Greek(x)) > (Best\_Grade(x) \land French(x))$
+
+      
+    \end{enumerate}
+
+
+
+
+
+\end{document}
+\endinput

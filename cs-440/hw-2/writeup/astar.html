@@ -1,0 +1,280 @@
+
+<html>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<style>
+
+html {
+  font-family: Arial;
+  font-size: 16px;
+  background: #DDD;
+}
+
+.sidebar {
+  position: fixed;
+  width: 15em;
+  height: 100vh;
+  background: #AAA;
+}
+
+.nav {
+  position: relative;
+  margin: 0 15%;
+  text-align: right;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+
+.nav ul {
+  list-style: none;
+  
+  li {
+    position: relative;
+    margin: 3.2em 0;
+    
+    a {
+      line-height: 5em;
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: 0.4em;
+      color: rgba(#FFF, 0.35);
+      display: block;
+      transition: all ease-out 300ms;
+    }
+    
+    &.active a {
+      color: white;
+    }
+    
+    &:not(.active)::after {
+      opacity: 0.2;
+    }
+    
+    &:not(.active):hover a {
+      color: rgba(#FFF, 0.75);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 0.2em;
+      background: black;
+      left: 0;
+      bottom: 0;
+      background-image: linear-gradient(to right, #5e42a6, #b74e91)
+    }
+  }
+}
+
+.body {
+  position: relative;
+  width: 95%;
+  float: right;
+  height: 100vh;
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  a {
+    position: relative;
+    
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  
+  p {
+    text-transform: uppercase;
+    font-size: 1em;
+    letter-spacing: 0.1em;
+    color: #FFF;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+}
+</style>
+
+    </head>
+<!-- This is a reverse engineering of the "Hyperspace"
+     design from HTML5 Up! https://html5up.net/hyperspace -->
+
+<main class="main">
+
+<section class="body">
+    <div class="container">
+         
+
+<h1>AStar</h1>  
+
+<p>In this assignment, you'll implement the A* Search algorithm.
+The stub code provides the framework for running A* on a generic
+`SearchProblem`.  Two `SearchProblem` classes are (partially) given:
+  both work on simple 2D grids: the GridProblem class works on a grid
+  represented by a list of lists (an example is included); the ImageProblem
+class works on a grid represented as pixels from an image.
+</p>
+
+<h2> Overview</h2>
+
+<ol>
+<li> Download the stub `astar.py`. </li>
+<li> Look through the code.  I've written some functionality, and the goal is for you to complete it.</li>
+<li> Note that there are 2 methods/functions that are unimplemented, these are where you should add your code.</li>
+<li> As before the code assumes four spaces of indentation. Set your editor appropriately, this is the default for many.</li>
+</ol>
+<h2> Notes on the Code</h2>
+
+I've added some descriptive doc-strings and comments. My hope is that these
+will help you understand the code better and write more idiomatic python.
+Here are a few items worth calling out:
+
+<b>heapq</b> the heapq module implements heap operations on a list. It is
+worth reading about. It let's you easily push and pop on a heap as well as
+heapify an unsorted list (recall that a fully sorted list would also be in heap order).
+
+<b>namedtuple</b> named tuples create objects that are immutable (like tuples)
+but whose data can be accessed by name (instead of by an integer index as in a
+normal tuple).  The TNode class should be used to describe a node in the
+search tree and thus a path from the one state to another. The syntax for creating
+a namedtuple class is relatively strange so there is a comment to explain it.
+However, aside from declaring the TNode class itself, usage is straightforward. To
+create a new TNode instance, you simply call the class supplying arguments for
+each instance variable.
+
+<pre>
+  a = TNode( 10, 6, 4, (0,0), None, "L" )
+</pre>
+
+As mentioned above, you can (and should) access data from TNode using names of
+the instance variables; so the following statements:
+
+<pre>
+  print(a.f)
+  print(a.g)
+  print(a.state)
+  print(a.parent)
+  print(a.action)
+</pre>
+
+would print:
+
+<pre>
+  10
+  6
+  (0, 0)
+  None
+  L
+</pre>
+
+If you want to test the code out (that's a good idea!) you'll need to have the some
+of the same libraries that autolab does.  Assuming you have anaconda installed, you'll want
+to create an "environment" for our class (to keep our libraries separate from
+those you use for other things).
+
+<pre>
+  >conda create -n cs440 python=3.10
+  >conda activate cs440
+</pre>
+
+After you issue the second command, your prompt should indicate that you're using
+the cs440 environment.  Mine looks like this:
+
+<pre>
+  (cs440)>
+</pre>
+
+Then, install pillow (the image library)
+<pre>
+  (cs440)>pip3 install pillow
+  </pre>
+
+
+
+
+<h2> Implement the methods</h2>
+
+
+Once the methods are implemented, you should be able to search the default
+grid simply by running from the command line:
+
+<pre>
+    >python astar.py
+</pre>
+My input/output looks like this:
+<pre>
+    (None, (0, 0))
+    ('D', (1, 0))
+    ('R', (1, 1))
+    ('D', (2, 1))
+    ('R', (2, 2))
+    ('R', (2, 3))
+    ('R', (2, 4))
+    ('D', (3, 4))
+    ('D', (4, 4))
+    ('R', (4, 5))
+    ('R', (4, 6))
+    Path found in 0.00 seconds
+    28 states in the reached dict
+    11 states on path to goal
+    cost is: 10.00
+</pre>
+
+Or limiting output of the path...
+<pre>
+    >python astar.py -n 0
+    Path found in 0.00 seconds
+    28 states in the reached dict
+    11 states on path to goal
+    cost is: 10.00
+    
+</pre>
+Or on an image...
+<pre>
+    >python astar.py 12x8.png
+    (None, (0, 0))
+    ('DR', (1, 1))
+    ('D', (1, 2))
+    ('D', (1, 3))
+    ('DR', (2, 4))
+    ('R', (3, 4))
+    ('R', (4, 4))
+    ('UR', (5, 3))
+    ('R', (6, 3))
+    ('R', (7, 3))
+    ('R', (8, 3))
+    ('DR', (9, 4))
+    ('D', (9, 5))
+    ('D', (9, 6))
+    ('DR', (10, 7))
+    ('R', (11, 7))
+    Path found in 0.00 seconds
+    75 states in the reached dict
+    16 states on path to goal
+    cost is: 15.00
+</pre>
+
+
+<h2> Turn in your code</h2>
+
+Submit your code via Autolab. If you think there's a problem with the tests,
+please check the inline code specification carefully and recheck your
+results.  You may also want to look at the specific test that it's failing
+and try to reproduce that result. If it still looks like the tests are
+incorrect, send me a message and if you're correct, I'm happy to give you
+some extra credit points.
+
+https://autolab.encs.vancouver.wsu.edu
+</div>
+
+
+</section>
+</main>
+</html>

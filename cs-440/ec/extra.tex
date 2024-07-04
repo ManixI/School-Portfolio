@@ -1,0 +1,86 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{apacite}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{courier}
+%\usepackage{fontenc}
+%\usepackage{fontspec}
+\usepackage{amsmath}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+
+
+%\lstset{basicstyle=\footnotesize\ttfamily, language=SQL}
+
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+    \begin{FlushLeft}
+        Ian Manix
+
+        Additional Logic Practice
+
+        April 8, 2023
+    \end{FlushLeft}
+
+    \section*{1}
+
+    \begin{enumerate}[a)]
+      
+        % 1
+        \item $\exists{x}\forall{y}\; Shaves(x,y) \land Barber(x) \land Man(y)$
+        \item $\exists{x}\forall{y}\; Shaves(x,y) \land Barber(x) \land Man(y) \land \neg Self\_Shave(x)$ where Self\_Shave(x) is someone who shaves themselves
+        \item s $\exists{x} \forall{y}\; Shaves(x,y) \land Barber(x) \land Barber(y)$
+
+    \end{enumerate}
+
+
+    \section*{2}
+
+    \begin{center}
+    \begin{tabular} {| c | c | c | c | c | c | c |}
+        \hline
+        B & C & D & $B \lor C \implies D$ & $B \implies D$ & $C \implies D$ & $(B \implies D) \land (C \implies D)$ \\
+        \hline
+        T & T & T & T & T & T & T \\
+        \hline
+        T & T & F & F & F & T & F \\
+        \hline
+        T & F & T & T & T & F & F \\
+        \hline
+        T & F & F & F & F & T & F \\
+        \hline
+        F & T & T & T & T & T & T \\
+        \hline
+        F & T & F & F & T & F & F \\
+        \hline
+        F & F & T & T & T & T & T \\
+        \hline
+        F & F & F & T & T & T & T \\
+        \hline
+    \end{tabular}
+    \end{center}
+    $B \lor C \implies D$ and $(B \implies D) \land (C \implies D)$ are not logically equivalent because in the case of B=T, C=F, and D=T they do not evaluate to the same result. 
+
+
+    \section*{3}
+    C is true: \\
+    E is true (5), this means that $D \lor B$ must be false (3) \\
+    If D is false A must be true (4) \\
+    Given the above two $B \implies A$ \\
+    B is undefined, but:
+    \begin{itemize}
+        \item If B is true then C must be true as $B \implies A \implies C$ and false cannot imply true 
+        \item If B in instead false then C must be true because $\neg B \implies C$ and false cannot imply true
+    \end{itemize}
+
+    
+
+\end{document}
+\endinput

@@ -1,0 +1,9 @@
+# ignore LaTeX compilation files
+*.aux
+*.fbd_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
+**/gcc-arm-none-eabi-10.3-2021.10
